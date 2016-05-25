@@ -1,9 +1,8 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     font-size:20px;
-    overflow:hidden;
+
     margin:0px; padding:0px;
-    background-color:#ccc;
 }
 
 #startButton {
@@ -15,3 +14,10 @@ body {
     width: 300px;
     height: 100px;
 }
+
+level1 {
+    background-image: url(../images/level-1.png);
+    width: 1000px;
+    height: 681px;
+}
+
