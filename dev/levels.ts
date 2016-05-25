@@ -1,3 +1,5 @@
+/// <reference path="enemies.ts"/>
+
 /**
  * Levels
  */

@@ -1,11 +1,12 @@
+/// <reference path="world.ts"/>
 /// <reference path="player.ts"/>
-/// <reference path="enemies.ts"/>
-/// <reference path="levels.ts"/>
 
 /**
  * Game
  */
 class Game {
+    private player : Player;
+    private world : World;
     
     constructor() {
         
