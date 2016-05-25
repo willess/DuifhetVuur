@@ -1,19 +1,18 @@
-/// <reference path="world.ts"/>
-/// <reference path="player.ts"/>
+/// <reference path="startgame.ts"/>
 
 /**
  * Game
  */
 class Game {
-    private player : Player;
-    private world : World;
+    private startGame : Startgame;
+    private score : Screenscore;
+    
+    
     
     constructor() {
         
-        console.log("maak player aan");
-        
-        //maakt player aan
-        //maakt wereld aan
+        //start the game
+        this.startGame = new Startgame();
         
     }
 }

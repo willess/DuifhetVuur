@@ -1,0 +1,8 @@
+/**
+ * Screenscore
+ */
+class Screenscore {
+    constructor() {
+        
+    }
+}
