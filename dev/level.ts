@@ -10,7 +10,8 @@ class Level {
     constructor(level, element) {
         
         //create Element
-        this.levelElement = document.createElement(element);
+        this.levelElement = document.createElement("level");
+        this.levelElement.setAttribute("id", "level1");
         document.body.appendChild(this.levelElement);
         
         //which level is loaded

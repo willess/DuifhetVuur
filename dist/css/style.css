@@ -15,9 +15,18 @@ body {
     height: 100px;
 }
 
+<<<<<<< HEAD
 level1 {
     background-image: url(../images/level-1.png);
     width: 1000px;
     height: 681px;
 }
 
+=======
+#level {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: seagreen;
+}
+>>>>>>> origin/master

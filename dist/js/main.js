@@ -5,7 +5,8 @@ var Enemies = (function () {
 }());
 var Level = (function () {
     function Level(level, element) {
-        this.levelElement = document.createElement(element);
+        this.levelElement = document.createElement("level");
+        this.levelElement.setAttribute("id", "level1");
         document.body.appendChild(this.levelElement);
         console.log("level " + level + " is loaded");
     }
