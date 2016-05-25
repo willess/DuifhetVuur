@@ -1,3 +1,5 @@
+/// <reference path="enemies.ts"/>
+
 /**
  * Character
  */
@@ -47,6 +49,7 @@ class Character {
             this.move();
             requestAnimationFrame(this.gameLoop.bind(this));
         }
+   
         // keyboard input changes speed
         private onKeyDown(event:KeyboardEvent):void {
         switch(event.keyCode){
@@ -90,4 +93,12 @@ class Character {
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         this.character.style.transform = "translate("+this.posX+"px, "+this.posY+"px) scaleX(-1)";
     }
+        public getX():number {
+            return this.posX;
+        }
+
+        public getY():number {
+            return this.posY;
+        }
+
 }

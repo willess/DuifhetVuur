@@ -1,3 +1,22 @@
+var Enemies = (function () {
+    function Enemies(enemyLevel, c, positionX, positionY) {
+        this.enemyDown = false;
+        this.enemy = document.createElement("enemy");
+        document.body.appendChild(this.enemy);
+        this.posX = positionX;
+        this.posY = positionY;
+        this.move();
+    }
+    Enemies.prototype.move = function () {
+        this.enemy.style.transform = "translate(" + this.posX + "px, " + this.posY + "px";
+    };
+    Enemies.prototype.checkCollision = function (pad) {
+        if (this.posX <= pad.getX() + 50 && this.posX >= pad.getX() - 50 && this.posY <= pad.getY() + 50 && this.posY >= pad.getY() - 50) {
+            console.log("Geraaaaakt!");
+        }
+    };
+    return Enemies;
+}());
 var Character = (function () {
     function Character(left, right, up, down) {
         this.leftSpeed = 0;
@@ -57,22 +76,29 @@ var Character = (function () {
         this.posY = this.posY - this.upSpeed + this.downSpeed;
         this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
     };
+    Character.prototype.getX = function () {
+        return this.posX;
+    };
+    Character.prototype.getY = function () {
+        return this.posY;
+    };
     return Character;
-}());
-var Enemies = (function () {
-    function Enemies(enemyLevel, c) {
-        this.enemy = document.createElement("enemy");
-        document.body.appendChild(this.enemy);
-    }
-    return Enemies;
 }());
 var Level = (function () {
     function Level(level, element) {
+        var styleLeft = 50;
+        var styleTop = 30;
         this.levelElement = document.createElement("level1");
         document.body.appendChild(this.levelElement);
         console.log("level " + level + " is loaded");
+        for (var i = 0; i < 5; i++) {
+            styleLeft += 50;
+            styleTop += 39;
+            styleLeft = Math.random() * window.innerWidth;
+            styleTop = Math.random() * window.innerHeight;
+            this.enemy = new Enemies(level, this, styleLeft - 50, styleTop - 50);
+        }
         this.character = new Character(65, 68, 87, 83);
-        this.enemy = new Enemies(level, this);
     }
     return Level;
 }());

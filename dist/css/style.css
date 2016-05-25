@@ -15,7 +15,7 @@ body * {
     margin:0px; padding:0px;
     box-sizing: border-box;
     background-repeat: no-repeat;
-    background-image: url(../images/backgroundLevel1.png);
+    background-image: url(../images/level-1.png);
     height: 100%;
     width: 100%;
     z-index: 0;
@@ -45,7 +45,9 @@ body * {
 
 level1 {
     background-image: url(../images/background/level-1.png);
-    background-repeat: no-repeat;
+    background-repeat: repeat;
+    width: 100%;
+    height: 100%;
     /*width: 1200px;   
     height: 600px;*/
 }
@@ -86,14 +88,14 @@ character {
     height: 181px;
 }
 
-enemy1 {
-    background-image: url(..images/enemies/msf_alive.gif);
+enemy {
+    background-image: url(../images/enemies/msf_alive.gif);
     width: 75px;
     height: 75px;
 }
 
 enemy1Dead {
-    background-image: url(..images/enemies/msf_dead.gif);
+    background-image: url(../images/enemies/msf_dead.gif);
     width: 75px;
     height: 75px;
 }
