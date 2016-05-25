@@ -86,15 +86,17 @@ character {
     background-color: none;
     width: 178px;
     height: 181px;
+    /*border: solid 1px black;*/
 }
 
 enemy {
     background-image: url(../images/enemies/msf_alive.gif);
     width: 75px;
     height: 75px;
+    /*border: solid 1px red;*/
 }
 
-enemy1Dead {
+#enemyDead {
     background-image: url(../images/enemies/msf_dead.gif);
     width: 75px;
     height: 75px;

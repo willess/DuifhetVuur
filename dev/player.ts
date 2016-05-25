@@ -7,6 +7,7 @@ class Player {
     public score : number;
     
     constructor() {
-        
+       
     }
+    
 }

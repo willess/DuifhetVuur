@@ -11,7 +11,11 @@ var Enemies = (function () {
         this.enemy.style.transform = "translate(" + this.posX + "px, " + this.posY + "px";
     };
     Enemies.prototype.checkCollision = function (pad) {
-        if (this.posX <= pad.getX() + 50 && this.posX >= pad.getX() - 50 && this.posY <= pad.getY() + 50 && this.posY >= pad.getY() - 50) {
+        if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
+            if (this.enemyDown == false) {
+                this.enemy.setAttribute("id", "enemyDead");
+                this.enemyDown = true;
+            }
             console.log("Geraaaaakt!");
         }
     };
@@ -86,20 +90,27 @@ var Character = (function () {
 }());
 var Level = (function () {
     function Level(level, element) {
+        this.enemyArray = [];
         var styleLeft = 50;
         var styleTop = 30;
         this.levelElement = document.createElement("level1");
         document.body.appendChild(this.levelElement);
         console.log("level " + level + " is loaded");
-        for (var i = 0; i < 5; i++) {
-            styleLeft += 50;
-            styleTop += 39;
+        for (var i = 0; i < 50; i++) {
             styleLeft = Math.random() * window.innerWidth;
             styleTop = Math.random() * window.innerHeight;
             this.enemy = new Enemies(level, this, styleLeft - 50, styleTop - 50);
+            this.enemyArray.push(this.enemy);
         }
         this.character = new Character(65, 68, 87, 83);
+        requestAnimationFrame(this.gameLoop.bind(this));
     }
+    Level.prototype.gameLoop = function () {
+        for (var i = 0; i < this.enemyArray.length; i++) {
+            this.enemyArray[i].checkCollision(this.character);
+        }
+        requestAnimationFrame(this.gameLoop.bind(this));
+    };
     return Level;
 }());
 var World = (function () {
