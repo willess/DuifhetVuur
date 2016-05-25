@@ -10,20 +10,30 @@ class Startgame {
     
     private player : Player;
 
+    private startWrapper : HTMLElement;
     private startButton : HTMLElement;
+    public nameTextField : HTMLElement;
     
     constructor() {
+        
+        //wrapper for button and text field
+        this.startWrapper = document.createElement("wrapper");
+        this.startWrapper.setAttribute("id", "startWrapper");
+        document.body.appendChild(this.startWrapper);
         
         //button with startgame
         this.startButton = document.createElement("button");
         this.startButton.setAttribute("id", "startButton");
         this.startButton.innerHTML = "Start game";
-        document.body.appendChild(this.startButton);
+        this.startWrapper.appendChild(this.startButton);
         this.startButton.addEventListener("click", function () {
+            
+        //text field
+
             
             //add player
             this.player = new Player();
-            document.body.removeChild(this);
+            //this.startWrapper.removeChild(this);
             //create World
             this.world = new World(1);
        });

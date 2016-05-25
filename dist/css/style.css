@@ -1,3 +1,7 @@
+@font-face { font-family: game-font; src: url('../font/font-game.ttf'); } 
+@font-face { font-family: game-font; font-weight: bold; src: url('Delicious-Bold.otf');}
+
+
 
 * {
     font-family: 'Press Start 2P', cursive;
@@ -20,11 +24,23 @@ body * {
 #startButton {
     background-color: green;
     color: white;
-    font-size: 20px;
+    font-size: 30px;
+    font-family: game-font;
     border: none;
     margin: 0 auto;
     width: 300px;
     height: 100px;
+}
+
+#startWrapper {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    padding-top: 50px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 level1 {

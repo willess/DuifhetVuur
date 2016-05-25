@@ -108,13 +108,15 @@ var Player = (function () {
 }());
 var Startgame = (function () {
     function Startgame() {
+        this.startWrapper = document.createElement("wrapper");
+        this.startWrapper.setAttribute("id", "startWrapper");
+        document.body.appendChild(this.startWrapper);
         this.startButton = document.createElement("button");
         this.startButton.setAttribute("id", "startButton");
         this.startButton.innerHTML = "Start game";
-        document.body.appendChild(this.startButton);
+        this.startWrapper.appendChild(this.startButton);
         this.startButton.addEventListener("click", function () {
             this.player = new Player();
-            document.body.removeChild(this);
             this.world = new World(1);
         });
     }
