@@ -34,10 +34,50 @@ level1 {
     height: 600px;*/
 }
 
+level2 {
+    background-image: url(../images/background/level-1.png);
+    background-repeat: no-repeat;
+    /*width: 1200px;   
+    height: 600px;*/
+}
+
+level3 {
+    background-image: url(../images/background/level-1.png);
+    background-repeat: no-repeat;
+    /*width: 1200px;   
+    height: 600px;*/
+}
+
+level4 {
+    background-image: url(../images/background/level-1.png);
+    background-repeat: no-repeat;
+    /*width: 1200px;   
+    height: 600px;*/
+}
+
+level5 {
+    background-image: url(../images/background/level-1.png);
+    background-repeat: no-repeat;
+    /*width: 1200px;   
+    height: 600px;*/
+}
+
 character {
     background-image: url(../images/character/Pidgeon_left.png);
     background-repeat: no-repeat;
     background-color: none;
     width: 178px;
     height: 181px;
+}
+
+enemy1 {
+    background-image: url(..images/enemies/msf_alive.gif);
+    width: 75px;
+    height: 75px;
+}
+
+enemy1Dead {
+    background-image: url(..images/enemies/msf_dead.gif);
+    width: 75px;
+    height: 75px;
 }
