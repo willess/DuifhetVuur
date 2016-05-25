@@ -1,0 +1,8 @@
+/**
+ * Player
+ */
+class Player {
+    constructor() {
+        
+    }
+}
