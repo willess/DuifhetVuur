@@ -1,14 +1,78 @@
+var Character = (function () {
+    function Character(left, right, up, down) {
+        this.leftSpeed = 0;
+        this.rightSpeed = 0;
+        this.downSpeed = 0;
+        this.upSpeed = 0;
+        this.character = document.createElement("character");
+        document.body.appendChild(this.character);
+        this.upkey = up;
+        this.downkey = down;
+        this.leftkey = left;
+        this.rightkey = right;
+        this.posX = 0;
+        this.posY = 220;
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyUp.bind(this));
+        requestAnimationFrame(this.gameLoop.bind(this));
+    }
+    Character.prototype.gameLoop = function () {
+        this.move();
+        requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    Character.prototype.onKeyDown = function (event) {
+        switch (event.keyCode) {
+            case this.upkey:
+                this.upSpeed = 5;
+                break;
+            case this.downkey:
+                this.downSpeed = 5;
+                break;
+            case this.leftkey:
+                this.leftSpeed = 5;
+                break;
+            case this.rightkey:
+                this.rightSpeed = 5;
+                break;
+        }
+    };
+    Character.prototype.onKeyUp = function (event) {
+        switch (event.keyCode) {
+            case this.upkey:
+                this.upSpeed = 0;
+                break;
+            case this.downkey:
+                this.downSpeed = 0;
+                break;
+            case this.leftkey:
+                this.leftSpeed = 0;
+                break;
+            case this.rightkey:
+                this.rightSpeed = 0;
+                break;
+        }
+    };
+    Character.prototype.move = function () {
+        this.posX = this.posX - this.leftSpeed + this.rightSpeed;
+        this.posY = this.posY - this.upSpeed + this.downSpeed;
+        this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+    };
+    return Character;
+}());
 var Enemies = (function () {
-    function Enemies() {
+    function Enemies(enemyLevel, c) {
+        this.enemy = document.createElement("enemy");
+        document.body.appendChild(this.enemy);
     }
     return Enemies;
 }());
 var Level = (function () {
     function Level(level, element) {
-        this.levelElement = document.createElement("level");
-        this.levelElement.setAttribute("id", "level1");
+        this.levelElement = document.createElement("level1");
         document.body.appendChild(this.levelElement);
         console.log("level " + level + " is loaded");
+        this.character = new Character(65, 68, 87, 83);
+        this.enemy = new Enemies(level, this);
     }
     return Level;
 }());
