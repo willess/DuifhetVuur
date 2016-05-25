@@ -1,10 +1,10 @@
 /**
- * Levels
+ * World
  */
-class Levels {
+class World {
     constructor() {
         
-        //maakt enemies aan
+        //maakt levels aan
         
     }
 }

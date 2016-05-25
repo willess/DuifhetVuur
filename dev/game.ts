@@ -6,7 +6,13 @@
  * Game
  */
 class Game {
+    
     constructor() {
+        
+        console.log("maak player aan");
+        
+        //maakt player aan
+        //maakt wereld aan
         
     }
 }

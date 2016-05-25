@@ -3,17 +3,28 @@ var Enemies = (function () {
     }
     return Enemies;
 }());
+var Player = (function () {
+    function Player() {
+    }
+    return Player;
+}());
+var Levels = (function () {
+    function Levels() {
+    }
+    return Levels;
+}());
 var Game = (function () {
     function Game() {
+        console.log("maak player aan");
     }
     return Game;
 }());
 window.addEventListener("load", function () {
     new Game();
 });
-var Player = (function () {
-    function Player() {
+var World = (function () {
+    function World() {
     }
-    return Player;
+    return World;
 }());
 //# sourceMappingURL=main.js.map
