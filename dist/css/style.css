@@ -15,7 +15,7 @@ body * {
     margin:0px; padding:0px;
     box-sizing: border-box;
     background-repeat: no-repeat;
-    background-image: url(../images/level-1.png);
+    /*background-image: url(../images/background/level-1.png);*/
     height: 100%;
     width: 100%;
     z-index: 0;
@@ -89,15 +89,13 @@ character {
     /*border: solid 1px black;*/
 }
 
-enemy {
+lucifer {
     background-image: url(../images/enemies/msf_alive.gif);
     width: 75px;
     height: 75px;
     /*border: solid 1px red;*/
 }
 
-#enemyDead {
+.enemyDead {
     background-image: url(../images/enemies/msf_dead.gif);
-    width: 75px;
-    height: 75px;
 }

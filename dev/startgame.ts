@@ -26,20 +26,18 @@ class Startgame {
         this.startButton.setAttribute("id", "startButton");
         this.startButton.innerHTML = "Start game";
         this.startWrapper.appendChild(this.startButton);
-        this.startButton.addEventListener("click", function () {
-            
-        //text field
-
-            
-            //add player
-            this.player = new Player();
-            //this.startWrapper.removeChild(this);
-            //create World
-            this.world = new World(1);
-       });
-       
-        //if button is clicked > create the world
-        //this.world = new World();
         
+        
+        this.startButton.addEventListener("click", this.createWorld.bind(this));
+    }
+    
+    
+    private createWorld(){
+        this.startWrapper.remove();
+        //add player
+        this.player = new Player();
+        //this.startWrapper.removeChild(this);
+        //create World
+        this.world = new World(1);
     }
 }
