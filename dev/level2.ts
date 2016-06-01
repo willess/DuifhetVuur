@@ -1,11 +1,11 @@
-/// <reference path="enemies.ts"/>
+/// <reference path="lucifer.ts"/>
 
 /**
  * Level
  */
-class Level1 {
+class Level2 {
     // Variables per level
-    private enemyAmount: number = 50;
+    private enemyAmount: number = 20;
     //declare variables
     public levelElement: HTMLElement;
     private character: Character;
@@ -17,7 +17,7 @@ class Level1 {
         document.body.appendChild(this.levelElement);
 
         //which level is loaded
-        console.log("level 1 is loaded");
+        console.log("level 2 is loaded");
 
         //add enemies
         for (var i = 0; i < this.enemyAmount; i++) {

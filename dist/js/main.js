@@ -98,6 +98,28 @@ var Character = (function () {
     };
     return Character;
 }());
+var Level1 = (function () {
+    function Level1() {
+        this.enemyAmount = 50;
+        this.enemyArray = [];
+        this.levelElement = document.createElement("level1");
+        document.body.appendChild(this.levelElement);
+        console.log("level 1 is loaded");
+        for (var i = 0; i < this.enemyAmount; i++) {
+            this.enemyArray.push(new Lucifer(1));
+        }
+        console.log(this.enemyArray);
+        this.character = new Character(65, 68, 87, 83);
+        requestAnimationFrame(this.gameLoop.bind(this));
+    }
+    Level1.prototype.gameLoop = function () {
+        for (var i = 0; i < this.enemyArray.length; i++) {
+            this.enemyArray[i].checkCollision(this.character);
+        }
+        requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    return Level1;
+}());
 var World = (function () {
     function World(level) {
         switch (level) {
@@ -105,7 +127,7 @@ var World = (function () {
                 this.level = new Level1();
                 break;
             case 2:
-                this.level = new Level1();
+                this.level = new Level2();
                 break;
             case 3:
                 this.level = new Level1();
@@ -142,7 +164,7 @@ var Startgame = (function () {
     Startgame.prototype.createWorld = function () {
         this.startWrapper.remove();
         this.player = new Player();
-        this.world = new World(1);
+        this.world = new World(2);
     };
     return Startgame;
 }());
@@ -152,13 +174,13 @@ var Game = (function () {
     }
     return Game;
 }());
-var Level1 = (function () {
-    function Level1() {
-        this.enemyAmount = 50;
+var Level2 = (function () {
+    function Level2() {
+        this.enemyAmount = 20;
         this.enemyArray = [];
         this.levelElement = document.createElement("level1");
         document.body.appendChild(this.levelElement);
-        console.log("level 1 is loaded");
+        console.log("level 2 is loaded");
         for (var i = 0; i < this.enemyAmount; i++) {
             this.enemyArray.push(new Lucifer(1));
         }
@@ -166,13 +188,13 @@ var Level1 = (function () {
         this.character = new Character(65, 68, 87, 83);
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-    Level1.prototype.gameLoop = function () {
+    Level2.prototype.gameLoop = function () {
         for (var i = 0; i < this.enemyArray.length; i++) {
             this.enemyArray[i].checkCollision(this.character);
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
-    return Level1;
+    return Level2;
 }());
 window.addEventListener("load", function () {
     new Game();

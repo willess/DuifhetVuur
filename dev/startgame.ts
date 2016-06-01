@@ -38,6 +38,6 @@ class Startgame {
         this.player = new Player();
         //this.startWrapper.removeChild(this);
         //create World
-        this.world = new World(1);
+        this.world = new World(2);
     }
 }

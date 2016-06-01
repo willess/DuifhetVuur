@@ -1,4 +1,4 @@
-/// <reference path="enemies.ts"/>
+/// <reference path="lucifer.ts"/>
 
 /**
  * Level

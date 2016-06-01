@@ -1,4 +1,4 @@
-/// <reference path="level.ts"/>
+/// <reference path="level1.ts"/>
 
 /**
  * World
@@ -13,7 +13,7 @@ class World {
         switch (level) {
             case 1: this.level = new Level1();
                 break;
-            case 2: this.level = new Level1();
+            case 2: this.level = new Level2();
                 break;
             case 3:  this.level = new Level1();
                 break;
