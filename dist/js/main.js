@@ -29,6 +29,7 @@ var Character = (function () {
         this.rightSpeed = 0;
         this.downSpeed = 0;
         this.upSpeed = 0;
+        this.lastKey = 0;
         this.character = document.createElement("character");
         document.body.appendChild(this.character);
         this.upkey = up;
@@ -55,9 +56,11 @@ var Character = (function () {
                 break;
             case this.leftkey:
                 this.leftSpeed = 5;
+                this.lastKey = 1;
                 break;
             case this.rightkey:
                 this.rightSpeed = 5;
+                this.lastKey = 0;
                 break;
         }
     };
@@ -80,7 +83,12 @@ var Character = (function () {
     Character.prototype.move = function () {
         this.posX = this.posX - this.leftSpeed + this.rightSpeed;
         this.posY = this.posY - this.upSpeed + this.downSpeed;
-        this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+        if (this.lastKey == 0) {
+            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+        }
+        else if (this.lastKey == 1) {
+            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        }
     };
     Character.prototype.getX = function () {
         return this.posX;

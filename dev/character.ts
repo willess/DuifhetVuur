@@ -23,6 +23,8 @@ class Character {
     private posX : number;
     private posY : number;
     
+    private lastKey : number = 0;
+    
     constructor(left:number, right:number, up:number, down:number) {
         
         this.character = document.createElement("character");
@@ -61,9 +63,11 @@ class Character {
             break;
         case this.leftkey:
             this.leftSpeed = 5;
+            this.lastKey = 1;
             break;
         case this.rightkey:
             this.rightSpeed = 5;
+            this.lastKey = 0;
             break;
         }
     }
@@ -79,9 +83,11 @@ class Character {
             break;
         case this.leftkey:
             this.leftSpeed = 0;
+            
             break;
         case this.rightkey:
             this.rightSpeed = 0;
+            
             break;
         }
     }
@@ -91,7 +97,12 @@ class Character {
         this.posY = this.posY - this.upSpeed + this.downSpeed;
                         
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
-        this.character.style.transform = "translate("+this.posX+"px, "+this.posY+"px) scaleX(-1)";
+        if(this.lastKey == 0){
+            this.character.style.transform = "translate("+this.posX+"px, "+this.posY+"px) scaleX(-1)";
+        }
+        else if(this.lastKey == 1){
+            this.character.style.transform = "translate("+this.posX+"px, "+this.posY+"px)";
+        }
     }
         public getX():number {
             return this.posX;
@@ -100,5 +111,6 @@ class Character {
         public getY():number {
             return this.posY;
         }
+        
 
 }
