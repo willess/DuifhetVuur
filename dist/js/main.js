@@ -18,7 +18,9 @@ var Lucifer = (function () {
                 this.div.classList.add("enemyDead");
                 this.enemyDown = true;
                 console.log("Geraaaaakt!");
+                return true;
             }
+            return false;
         }
     };
     return Lucifer;
@@ -98,57 +100,66 @@ var Character = (function () {
     };
     return Character;
 }());
-var Level1 = (function () {
-    function Level1() {
-        this.enemyAmount = 50;
+var Level = (function () {
+    function Level(levelNumber, character, enemyAmount, toUseBackground) {
         this.enemyArray = [];
-        this.levelElement = document.createElement("level1");
+        this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
-        console.log("level 1 is loaded");
-        for (var i = 0; i < this.enemyAmount; i++) {
-            this.enemyArray.push(new Lucifer(1));
+        this.enemyAmount = enemyAmount;
+        this.levelNumber = levelNumber;
+        Level.killCounter = new EnemiesKilled(enemyAmount);
+        for (var i = 0; i < enemyAmount; i++) {
+            this.enemyArray.push(new Lucifer(levelNumber));
         }
-        console.log(this.enemyArray);
-        this.character = new Character(65, 68, 87, 83);
+        this.character = character;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-    Level1.prototype.gameLoop = function () {
+    Level.prototype.gameLoop = function () {
         for (var i = 0; i < this.enemyArray.length; i++) {
-            this.enemyArray[i].checkCollision(this.character);
+            if (this.enemyArray[i].checkCollision(this.character)) {
+                Level.killCounter.updateScores();
+            }
+        }
+        if (Level.killCounter.isLevelComplete()) {
+            new Level(this.levelNumber++, this.character, this.enemyAmount * 2, "level1");
+            this.character = null;
+            this.enemyAmount = null;
+            this.enemyArray = null;
+            this.levelElement = null;
+            this.levelNumber = null;
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
-    return Level1;
+    return Level;
 }());
-var World = (function () {
-    function World(level) {
-        switch (level) {
-            case 1:
-                this.level = new Level1();
-                break;
-            case 2:
-                this.level = new Level2();
-                break;
-            case 3:
-                this.level = new Level1();
-                break;
-            case 4:
-                this.level = new Level1();
-                break;
-            case 5:
-                this.level = new Level1();
-                break;
-            default:
-                break;
-        }
-        console.log("test!!!");
-    }
-    return World;
-}());
+window.addEventListener("load", function () {
+    new Startgame();
+});
 var Player = (function () {
     function Player() {
     }
     return Player;
+}());
+var EnemiesKilled = (function () {
+    function EnemiesKilled(toKillEnemies) {
+        this.deathCount = 0;
+        this.div = document.getElementsByTagName("ui")[0];
+        this.toKillEnemies = toKillEnemies;
+        console.log("Game start!");
+    }
+    EnemiesKilled.prototype.updateScores = function () {
+        this.deathCount++;
+        console.log("Je hebt " + this.deathCount + " vijand(en) verslagen!");
+        this.isLevelComplete();
+    };
+    EnemiesKilled.prototype.isLevelComplete = function () {
+        if (this.deathCount == this.toKillEnemies) {
+            console.log("Je hebt het level gehaald!");
+            return true;
+        }
+        return false;
+    };
+    return EnemiesKilled;
 }());
 var Startgame = (function () {
     function Startgame() {
@@ -163,45 +174,8 @@ var Startgame = (function () {
     }
     Startgame.prototype.createWorld = function () {
         this.startWrapper.remove();
-        this.player = new Player();
-        this.world = new World(2);
+        new Level(1, new Character(65, 68, 87, 83), 50, "level1");
     };
     return Startgame;
-}());
-var Game = (function () {
-    function Game() {
-        this.startGame = new Startgame();
-    }
-    return Game;
-}());
-var Level2 = (function () {
-    function Level2() {
-        this.enemyAmount = 20;
-        this.enemyArray = [];
-        this.levelElement = document.createElement("level1");
-        document.body.appendChild(this.levelElement);
-        console.log("level 2 is loaded");
-        for (var i = 0; i < this.enemyAmount; i++) {
-            this.enemyArray.push(new Lucifer(1));
-        }
-        console.log(this.enemyArray);
-        this.character = new Character(65, 68, 87, 83);
-        requestAnimationFrame(this.gameLoop.bind(this));
-    }
-    Level2.prototype.gameLoop = function () {
-        for (var i = 0; i < this.enemyArray.length; i++) {
-            this.enemyArray[i].checkCollision(this.character);
-        }
-        requestAnimationFrame(this.gameLoop.bind(this));
-    };
-    return Level2;
-}());
-window.addEventListener("load", function () {
-    new Game();
-});
-var Screenscore = (function () {
-    function Screenscore() {
-    }
-    return Screenscore;
 }());
 //# sourceMappingURL=main.js.map

@@ -20,10 +20,14 @@ class Lucifer {
     private counter: number;
     
     private hitpoints: number;
+    
+    //?
+    //private game:Game;
 
     constructor(enemyLevel:number) {
         this.enemyLevel = enemyLevel;
         this.hitpoints = enemyLevel;
+        
         
         this.div = document.createElement("lucifer");
         document.body.appendChild(this.div);
@@ -41,8 +45,7 @@ class Lucifer {
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px";
     }
     
-    
-    public checkCollision(pad: Character) {
+    public checkCollision(pad: Character) : boolean {
         if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
            //Als character raakt lucifer dan ...
             if (this.enemyDown == false) {
@@ -50,9 +53,11 @@ class Lucifer {
                 this.div.classList.add("enemyDead");
                 this.enemyDown = true;
                 console.log("Geraaaaakt!");
+
+                return true;
+               
             }
-            
+            return false;           
         }
     }
-
 }

@@ -35,9 +35,6 @@ class Startgame {
     private createWorld(){
         this.startWrapper.remove();
         //add player
-        this.player = new Player();
-        //this.startWrapper.removeChild(this);
-        //create World
-        this.world = new World(2);
+        new Level(1, new Character(65, 68, 87, 83), 50, "level1");
     }
 }
