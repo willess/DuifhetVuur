@@ -2,20 +2,26 @@
  * Screenscore
  */
 class EnemiesKilled {
-    private deathCount: number = 0;
-    private toKillEnemies: number;
+    public deathCount: number = 0;
+    public toKillEnemies: number;
     private div: Element;
+    private static textFieldButton: HTMLElement;
 
 
     constructor(toKillEnemies: number) {
         this.div = document.getElementsByTagName("ui")[0];
         this.toKillEnemies = toKillEnemies;
         console.log("Game start!");
+        this.div = document.createElement("score");
+        document.body.appendChild(this.div);
     }
 
     public updateScores() {
         this.deathCount++;
-        console.log("Je hebt " + this.deathCount + " vijand(en) verslagen!")
+        
+        
+        this.div.innerHTML = "U heeft op dit moment " + this.deathCount + " fakkels gedoofd.";
+
         this.isLevelComplete();
     }
 

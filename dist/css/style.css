@@ -21,6 +21,15 @@ body * {
     z-index: 0;
 }
 
+#hoi{
+    width: 300px;
+    height: 100px;
+    background-color: aquamarine;
+    color: black;
+    padding: 100px, 100px, 100px, 100px; 
+    z-index: 4;
+}
+
 #startButton {
     background-color: green;
     color: white;
@@ -100,4 +109,10 @@ lucifer {
 
 .enemyDead {
     background-image: url(../images/enemies/msf_dead.gif);
+}
+
+score{
+    font-size: 25px;
+    color: white;
+    z-index: 10;
 }

@@ -7,7 +7,7 @@ class Lucifer {
 
     private div: HTMLElement;
 
-    private enemyLevel:number;
+    private enemyLevel: number;
 
     private positionX;
     private positionY;
@@ -18,36 +18,30 @@ class Lucifer {
     private enemyDown: boolean = false;
 
     private counter: number;
-    
-    private hitpoints: number;
-    
-    //?
-    //private game:Game;
 
-    constructor(enemyLevel:number) {
+    private hitpoints: number;
+
+    constructor(enemyLevel: number) {
         this.enemyLevel = enemyLevel;
         this.hitpoints = enemyLevel;
-        
-        
+
         this.div = document.createElement("lucifer");
         document.body.appendChild(this.div);
-        
+
 
         this.posX = Math.random() * window.innerWidth;
-        this.posY =  Math.random() * window.innerHeight;
+        this.posY = Math.random() * window.innerHeight;
 
-        this.move();
-
-        // this.counter = 0;
+        this.setLocation(this.posX, this.posY);
     }
 
-    public move() {
-        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px";
+    public setLocation(x:number, y:number) {
+        this.div.style.transform = "translate(" + x + "px, " + y + "px";
     }
-    
-    public checkCollision(pad: Character) : boolean {
-        if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
-           //Als character raakt lucifer dan ...
+
+    public checkCollision(player: Character): boolean {
+        if (this.posX <= player.getX() + 80 && this.posX >= player.getX() - 80 && this.posY <= player.getY() + 150 && this.posY >= player.getY() - 10) {
+            //Als character raakt lucifer dan ...
             if (this.enemyDown == false) {
                 //this.div.setAttribute("id", "enemyDead");
                 this.div.classList.add("enemyDead");
@@ -55,9 +49,9 @@ class Lucifer {
                 console.log("Geraaaaakt!");
 
                 return true;
-               
+
             }
-            return false;           
+            return false;
         }
     }
 }
