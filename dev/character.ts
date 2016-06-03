@@ -93,8 +93,7 @@ class Character {
     }
     private move(): void {
 
-        this.posX = this.posX - this.leftSpeed + this.rightSpeed;
-        this.posY = this.posY - this.upSpeed + this.downSpeed;
+    this.checkWalls();
 
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         if (this.lastKey == 0) {
@@ -112,5 +111,20 @@ class Character {
         return this.posY;
     }
 
+  private checkWalls(): void {
+    
+        if (this.posX > -40) {
+            this.posX = this.posX - this.leftSpeed;
+        }
+        if (this.posX < window.outerWidth) {
+            this.posX = this.posX + this.rightSpeed;
+        }
+        if (this.posY > -25) {
+            this.posY = this.posY - this.upSpeed;
+        }
+        if (this.posY < window.outerHeight-260) {
 
+            this.posY = this.posY + this.downSpeed;
+        }
+    }
 }

@@ -83,8 +83,7 @@ var Character = (function () {
         }
     };
     Character.prototype.move = function () {
-        this.posX = this.posX - this.leftSpeed + this.rightSpeed;
-        this.posY = this.posY - this.upSpeed + this.downSpeed;
+        this.checkWalls();
         if (this.lastKey == 0) {
             this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
         }
@@ -97,6 +96,22 @@ var Character = (function () {
     };
     Character.prototype.getY = function () {
         return this.posY;
+    };
+    Character.prototype.checkWalls = function () {
+        console.log(window.outerWidth + "     " + window.outerHeight);
+        console.log("X" + this.posX + "     " + "Y" + this.posY);
+        if (this.posX > -40) {
+            this.posX = this.posX - this.leftSpeed;
+        }
+        if (this.posX < window.outerWidth) {
+            this.posX = this.posX + this.rightSpeed;
+        }
+        if (this.posY > -25) {
+            this.posY = this.posY - this.upSpeed;
+        }
+        if (this.posY < window.outerHeight - 260) {
+            this.posY = this.posY + this.downSpeed;
+        }
     };
     return Character;
 }());
