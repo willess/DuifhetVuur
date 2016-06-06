@@ -19,6 +19,12 @@ class Level {
         switch (levelNumber) {
             case 1:
             console.log("level 1!");
+            console.log("innerwidth" + window.innerWidth);
+            console.log("innerheight" + window.innerHeight);
+            console.log("outerwidth" + window.outerWidth);
+            console.log("outerheight" + window.outerHeight);
+            
+            
                 this.matches = 5;
                 this.fire = 0;
                 break;
@@ -29,19 +35,19 @@ class Level {
 
                 break;
             case 3:
-                console.log("level 2!");
+                console.log("level 3!");
                 this.matches = 10;
                 this.fire = 8;
 
                 break;
             case 4:
-                console.log("level 2!");
+                console.log("level 4!");
                 this.matches = 10;
                 this.fire = 10;
 
                 break;
             case 5:
-                console.log("level 2!");
+                console.log("level 5!");
                 this.matches = 10;
                 this.fire = 12;
 

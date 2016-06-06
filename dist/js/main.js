@@ -5,8 +5,16 @@ var Lucifer = (function () {
         this.hitpoints = enemyLevel;
         this.div = document.createElement("lucifer");
         document.body.appendChild(this.div);
-        this.posX = Math.random() * window.innerWidth;
-        this.posY = Math.random() * window.innerHeight;
+        function randomX(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        function randomY(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        this.posX = randomX(200, window.innerWidth - 40);
+        this.posY = randomY(50, window.innerHeight - 50);
+        console.log("lucifer x position is " + this.posX);
+        console.log("lucifer y position is " + this.posY);
         this.setLocation(this.posX, this.posY);
     }
     Lucifer.prototype.setLocation = function (x, y) {
@@ -120,6 +128,10 @@ var Level = (function () {
         switch (levelNumber) {
             case 1:
                 console.log("level 1!");
+                console.log("innerwidth" + window.innerWidth);
+                console.log("innerheight" + window.innerHeight);
+                console.log("outerwidth" + window.outerWidth);
+                console.log("outerheight" + window.outerHeight);
                 this.matches = 5;
                 this.fire = 0;
                 break;
@@ -129,17 +141,17 @@ var Level = (function () {
                 this.fire = 4;
                 break;
             case 3:
-                console.log("level 2!");
+                console.log("level 3!");
                 this.matches = 10;
                 this.fire = 8;
                 break;
             case 4:
-                console.log("level 2!");
+                console.log("level 4!");
                 this.matches = 10;
                 this.fire = 10;
                 break;
             case 5:
-                console.log("level 2!");
+                console.log("level 5!");
                 this.matches = 10;
                 this.fire = 12;
                 break;
