@@ -127,6 +127,90 @@ var Character = (function () {
     };
     return Character;
 }());
+var Player = (function () {
+    function Player() {
+    }
+    return Player;
+}());
+var Startgame = (function () {
+    function Startgame() {
+        this.startScreen = document.createElement("beginscreen");
+        this.startScreen.setAttribute("class", "startScreen");
+        document.body.appendChild(this.startScreen);
+        this.startWrapper = document.createElement("wrapper");
+        this.startWrapper.setAttribute("id", "startWrapper");
+        document.body.appendChild(this.startWrapper);
+        this.nameTextField = document.createElement("input");
+        this.nameTextField.setAttribute("class", "textfield");
+        this.nameTextField.setAttribute("id", "playerInput");
+        this.nameTextField.setAttribute("type", "text");
+        this.nameTextField.setAttribute("value", "");
+        this.startWrapper.appendChild(this.nameTextField);
+        this.startLogo = document.createElement("logo");
+        this.startLogo.setAttribute("class", "startLogo");
+        this.startScreen.appendChild(this.startLogo);
+        this.startButton = document.createElement("button");
+        this.startButton.setAttribute("id", "startButton");
+        this.startButton.innerHTML = "Start game";
+        this.startWrapper.appendChild(this.startButton);
+        this.startHighscore = document.createElement("button");
+        this.startHighscore.setAttribute("id", "startHighscore");
+        this.startWrapper.appendChild(this.startHighscore);
+        this.startHighscore.addEventListener("click", this.highscoreScreen.bind(this));
+        this.startHowToPlay = document.createElement("button");
+        this.startHowToPlay.setAttribute("id", "startHowToPlay");
+        this.startWrapper.appendChild(this.startHowToPlay);
+        this.startHowToPlay.addEventListener("click", this.HowToPlayScreen.bind(this));
+        this.startCredits = document.createElement("button");
+        this.startCredits.setAttribute("id", "startCredits");
+        this.startWrapper.appendChild(this.startCredits);
+        this.startCredits.addEventListener("click", this.creditScreen.bind(this));
+        this.startButton.addEventListener("click", this.createWorld.bind(this));
+    }
+    Startgame.prototype.createWorld = function () {
+        this.startScreen.remove();
+        this.startWrapper.remove();
+        new Level(1, "level1");
+    };
+    Startgame.prototype.highscoreScreen = function () {
+        this.startLogo.remove();
+        this.startWrapper.remove();
+        this.highscoreView = new highscore();
+    };
+    Startgame.prototype.HowToPlayScreen = function () {
+        this.startLogo.remove();
+        this.startWrapper.remove();
+    };
+    Startgame.prototype.creditScreen = function () {
+        this.startLogo.remove();
+        this.startWrapper.remove();
+    };
+    return Startgame;
+}());
+var highscore = (function () {
+    function highscore() {
+        this.scoreScreen = document.createElement("wrapper");
+        this.scoreScreen.setAttribute("id", "screenScore");
+        document.body.appendChild(this.scoreScreen);
+        this.highscoreText = document.createElement("screenText");
+        this.highscoreText.setAttribute("class", "highScoretext");
+        this.highscoreText.innerHTML = "Highscores";
+        this.scoreScreen.appendChild(this.highscoreText);
+        this.screenInfo = document.createElement("score");
+        this.screenInfo.setAttribute("class", "screenScoreInfo");
+        this.scoreScreen.appendChild(this.screenInfo);
+        this.backButton = document.createElement("backButton");
+        this.backButton.setAttribute("class", "backButton");
+        this.backButton.innerHTML = "Terug naar Hoofdmenu";
+        this.scoreScreen.appendChild(this.backButton);
+        this.backButton.addEventListener("click", this.showStartScreen.bind(this));
+    }
+    highscore.prototype.showStartScreen = function () {
+        this.scoreScreen.remove();
+        this.Startgame = new Startgame();
+    };
+    return highscore;
+}());
 var Level = (function () {
     function Level(levelNumber, toUseBackground) {
         this.matchArray = [];
@@ -205,10 +289,32 @@ var Level = (function () {
 window.addEventListener("load", function () {
     new Startgame();
 });
-var Player = (function () {
-    function Player() {
+var screenScore = (function () {
+    function screenScore() {
     }
-    return Player;
+    screenScore.prototype.clearScreen = function () {
+        this.nextLevelWrapper = document.createElement("wrapper");
+        this.nextLevelWrapper.setAttribute("id", "screenWrapper");
+        document.body.appendChild(this.nextLevelWrapper);
+        this.levelComplete = document.createElement("screen");
+        this.levelComplete.setAttribute("class", "levelComplete");
+        this.levelComplete.innerHTML = "LevelComplete";
+        this.nextLevelWrapper.appendChild(this.levelComplete);
+        this.gameInfo = document.createElement("info");
+        this.gameInfo.setAttribute("class", "gameInfo");
+        this.gameInfo.innerHTML = "Dit level heeft geen nieuw wapen nodig";
+        this.nextLevelWrapper.appendChild(this.gameInfo);
+        this.subScore = document.createElement("subScore");
+        this.subScore.setAttribute("class", "currentScore");
+        this.subScore.innerHTML = "score";
+        this.nextLevelWrapper.appendChild(this.subScore);
+        this.nextButton = document.createElement("nextButton");
+        this.nextButton.setAttribute("class", "nextLevel");
+        this.nextButton.innerHTML = "Volgende level";
+        this.nextLevelWrapper.appendChild(this.nextButton);
+        this.nextButton.addEventListener("click", this.level.bind(this));
+    };
+    return screenScore;
 }());
 var EnemiesKilled = (function () {
     function EnemiesKilled(toKillEnemies) {
@@ -232,22 +338,5 @@ var EnemiesKilled = (function () {
         return false;
     };
     return EnemiesKilled;
-}());
-var Startgame = (function () {
-    function Startgame() {
-        this.startWrapper = document.createElement("wrapper");
-        this.startWrapper.setAttribute("id", "startWrapper");
-        document.body.appendChild(this.startWrapper);
-        this.startButton = document.createElement("button");
-        this.startButton.setAttribute("id", "startButton");
-        this.startButton.innerHTML = "Start game";
-        this.startWrapper.appendChild(this.startButton);
-        this.startButton.addEventListener("click", this.createWorld.bind(this));
-    }
-    Startgame.prototype.createWorld = function () {
-        this.startWrapper.remove();
-        new Level(1, "level1");
-    };
-    return Startgame;
 }());
 //# sourceMappingURL=main.js.map

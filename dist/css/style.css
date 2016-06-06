@@ -31,7 +31,7 @@ body * {
 }
 
 #startButton {
-    background-color: green;
+    background-color:#DC152C;
     color: white;
     font-size: 30px;
     font-family: game-font;
@@ -39,17 +39,143 @@ body * {
     margin: 0 auto;
     width: 300px;
     height: 100px;
+    top:100px;
+    border-radius: 10px;
+    border:solid 5px white;
+    box-shadow: 0 10px 6px -6px #777;
 }
 
 #startWrapper {
     width: 300px;
     height: 300px;
     margin: 0 auto;
-    padding-top: 50px;
-    top: 0;
+    padding-top: 100px;
+    top: 350px;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+#screenWrapper{
+    height:500px;
+    width:600px;
+    border:solid;
+    background-color:red;
+}
+
+screen{
+    height:200px;
+    width:600px;
+    font-size:60px;
+    color: white;
+    padding:40px;
+    padding-left:60px;
+    font-family: game-font;
+    
+}
+
+nextButton {
+    background-color: green;
+    color: white;
+    font-size: 30px;
+    font-family: game-font;
+    border: none;
+    margin: 0 auto;
+    width: 200px;
+    height: 100px;
+    margin-bottom:10px;
+    padding:20px;
+    top:300px;
+    left:380px;
+}
+
+info{
+    height:200px;
+    width:300px;
+    border:solid;
+    background-color:yellow;
+    padding:20px;
+    top:200px;
+    left:60px;
+    font-family: game-font;
+}
+
+subScore{
+    background-color: green;
+    color: white;
+    font-size: 30px;
+    font-family: game-font;
+    
+    border: none;
+    margin: 0 auto;
+    width: 200px;
+    height: 50px;
+    padding:20px;
+    padding-left:50px;
+    top:200px;
+    left:380px;
+}
+
+.startLogo {
+    background-image: url(../images/background/DHV_logo.png);
+    background-repeat: no-repeat;
+    height: 500px;
+    width: 600px;
+    margin: 0 auto;
+    padding-top: 50px;
+    top: -77px;
+    bottom: 0;
+    left: 90px;
+    right: 0;
+}
+
+beginScreen{
+    height:100%;
+    width:100%;
+    background-color:lightblue;
+}
+
+input#playerInput {
+    height: 50px;
+    bottom: 222px;
+    font-size: 24px;
+}
+
+#startHighscore{
+    background-image: url(..//images/background/menu_icons/highscore.png);
+    background-size: contain;
+    height:60px;
+    width:60px;
+    bottom:8px;
+    left:0px;
+    border-radius:30px;
+    border: solid 5px white;
+    background-color:#DC152C;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
+#startCredits{
+    background-image: url();
+    height:60px;
+    width:60px;
+    bottom:8px;
+    left:120px;
+    border-radius:30px;
+    border: solid 5px white;
+    background-color:#DC152C;
+    box-shadow: 0 10px 6px -6px #777;
+}
+
+#startHowToPlay{
+    background-image: url();
+    height:60px;
+    width:60px;
+    bottom:8px;
+    left: 240px;
+    border-radius:30px;
+    border: solid 5px white;
+    background-color:#DC152C;
+    box-shadow: 0 10px 6px -6px #777;
 }
 
 level1 {
