@@ -7,26 +7,25 @@ class Level {
     private levelNumber: number;
     public levelElement: HTMLElement;
     
+    private match: Lucifer;
+    
     private matches: number;
     private fire: number;
     
     private matchArray = [];
     private fireArray = [];
+    
+    private weapon: boolean;
 
-    constructor(levelNumber: number, character: Character, character2: Character, toUseBackground: string) {
+    constructor(levelNumber: number, toUseBackground: string) {
        
         
         switch (levelNumber) {
             case 1:
-            console.log("level 1!");
-            console.log("innerwidth" + window.innerWidth);
-            console.log("innerheight" + window.innerHeight);
-            console.log("outerwidth" + window.outerWidth);
-            console.log("outerheight" + window.outerHeight);
-            
-            
+            console.log("Level 1");
                 this.matches = 5;
                 this.fire = 0;
+                this.weapon = false;
                 break;
             case 2:
             console.log("level 2!");
@@ -59,7 +58,10 @@ class Level {
         
         this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
-
+        
+        this.playerTwo = new Character(65, 68, 87, 83, 0, 150);
+        this.playerOne =  new Character(37, 39, 38, 40, 0, 250);
+        
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
             Level.killCounter = new EnemiesKilled(this.matches);
@@ -69,11 +71,9 @@ class Level {
         }
 
         for (var i = 0; i < this.matches; i++) {
-            this.matchArray.push(new Lucifer(levelNumber));
+            this.match = new Lucifer(levelNumber);
+            this.matchArray.push(this.match);
         }
-
-        this.playerTwo = character2;
-        this.playerOne = character;
 
         requestAnimationFrame(this.gameLoop.bind(this));
     }
@@ -89,14 +89,20 @@ class Level {
         }
 
         if (Level.killCounter.isLevelComplete()) {
-            this.levelNumber++;
-            new Level(this.levelNumber, this.playerOne, this.playerTwo, "level1");
-            this.playerOne = null;
-            this.enemyAmount = null;
+           
+            for (var c of this.matchArray) {
+                c.deleteMatch();
+            }
+           
+            this.playerOne.deleteCharacter();
+            this.playerTwo.deleteCharacter();
+            // this.playerOne = null;
             this.matchArray = null;
             this.levelElement = null;
             // this.levelNumber = null;
             this.playerTwo = null;
+            this.levelNumber++;
+            new Level(this.levelNumber, "level1");
         }
 
 

@@ -127,4 +127,8 @@ class Character {
             this.posY = this.posY + this.downSpeed;
         }
     }
+    
+    public deleteCharacter(): void {
+        document.body.removeChild(this.character);
+    }
 }

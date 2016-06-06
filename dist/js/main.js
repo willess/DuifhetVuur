@@ -31,6 +31,9 @@ var Lucifer = (function () {
             return false;
         }
     };
+    Lucifer.prototype.deleteMatch = function () {
+        document.body.removeChild(this.div);
+    };
     return Lucifer;
 }());
 var Character = (function () {
@@ -119,21 +122,21 @@ var Character = (function () {
             this.posY = this.posY + this.downSpeed;
         }
     };
+    Character.prototype.deleteCharacter = function () {
+        document.body.removeChild(this.character);
+    };
     return Character;
 }());
 var Level = (function () {
-    function Level(levelNumber, character, character2, toUseBackground) {
+    function Level(levelNumber, toUseBackground) {
         this.matchArray = [];
         this.fireArray = [];
         switch (levelNumber) {
             case 1:
-                console.log("level 1!");
-                console.log("innerwidth" + window.innerWidth);
-                console.log("innerheight" + window.innerHeight);
-                console.log("outerwidth" + window.outerWidth);
-                console.log("outerheight" + window.outerHeight);
+                console.log("Level 1");
                 this.matches = 5;
                 this.fire = 0;
+                this.weapon = false;
                 break;
             case 2:
                 console.log("level 2!");
@@ -160,6 +163,8 @@ var Level = (function () {
         }
         this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
+        this.playerTwo = new Character(65, 68, 87, 83, 0, 150);
+        this.playerOne = new Character(37, 39, 38, 40, 0, 250);
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
             Level.killCounter = new EnemiesKilled(this.matches);
@@ -169,10 +174,9 @@ var Level = (function () {
             Level.killCounter.toKillEnemies = this.matches;
         }
         for (var i = 0; i < this.matches; i++) {
-            this.matchArray.push(new Lucifer(levelNumber));
+            this.match = new Lucifer(levelNumber);
+            this.matchArray.push(this.match);
         }
-        this.playerTwo = character2;
-        this.playerOne = character;
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Level.prototype.gameLoop = function () {
@@ -182,13 +186,17 @@ var Level = (function () {
             }
         }
         if (Level.killCounter.isLevelComplete()) {
-            this.levelNumber++;
-            new Level(this.levelNumber, this.playerOne, this.playerTwo, "level1");
-            this.playerOne = null;
-            this.enemyAmount = null;
+            for (var _i = 0, _a = this.matchArray; _i < _a.length; _i++) {
+                var c = _a[_i];
+                c.deleteMatch();
+            }
+            this.playerOne.deleteCharacter();
+            this.playerTwo.deleteCharacter();
             this.matchArray = null;
             this.levelElement = null;
             this.playerTwo = null;
+            this.levelNumber++;
+            new Level(this.levelNumber, "level1");
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     };
@@ -213,7 +221,7 @@ var EnemiesKilled = (function () {
     }
     EnemiesKilled.prototype.updateScores = function () {
         this.deathCount++;
-        this.div.innerHTML = "U heeft op dit moment " + this.deathCount + " fakkels gedoofd.";
+        this.div.innerHTML = "Je hebt al " + this.deathCount + " fakkel(s) gedoofd van de " + this.toKillEnemies + "  fakkels!";
         this.isLevelComplete();
     };
     EnemiesKilled.prototype.isLevelComplete = function () {
@@ -238,7 +246,7 @@ var Startgame = (function () {
     }
     Startgame.prototype.createWorld = function () {
         this.startWrapper.remove();
-        new Level(1, new Character(65, 68, 87, 83, 0, 150), new Character(37, 39, 38, 40, 0, 250), "level1");
+        new Level(1, "level1");
     };
     return Startgame;
 }());
