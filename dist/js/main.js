@@ -134,6 +134,13 @@ var Player = (function () {
 }());
 var Startgame = (function () {
     function Startgame() {
+        var sound = new Howl({
+            urls: ["sound/intro/smash_cops_heat.mp3"],
+            sprite: {
+                intro: [0, 150000],
+            }
+        });
+        sound.play('intro');
         this.startScreen = document.createElement("beginscreen");
         this.startScreen.setAttribute("class", "startScreen");
         document.body.appendChild(this.startScreen);
@@ -174,6 +181,7 @@ var Startgame = (function () {
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
+        this.startScreen.remove();
         this.startWrapper.remove();
         this.highscoreView = new highscore();
     };
@@ -283,6 +291,8 @@ var Level = (function () {
             new Level(this.levelNumber, "level1");
         }
         requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    Level.prototype.nextLevel = function () {
     };
     return Level;
 }());

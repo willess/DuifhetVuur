@@ -1,4 +1,5 @@
 /// <reference path="player.ts"/>
+/// <reference path="howler.d.ts"/>
 
 /**
  * Startgame
@@ -29,6 +30,15 @@ class Startgame {
     private highscoreView: any;
 
 constructor() {
+    
+            var sound = new Howl({
+                urls: ["sound/intro/smash_cops_heat.mp3"],
+                sprite: {
+                    intro: [0, 150000],
+                }
+            });
+           
+        sound.play('intro');
 
         //background startgame
         this.startScreen = document.createElement("beginscreen");
@@ -79,6 +89,7 @@ constructor() {
 
 
         this.startButton.addEventListener("click", this.createWorld.bind(this));
+        
     }
 
     private createWorld() {
@@ -89,6 +100,7 @@ constructor() {
     
     private highscoreScreen(){
         this.startLogo.remove();
+        this.startScreen.remove();
         this.startWrapper.remove();
         this.highscoreView = new highscore();
     }

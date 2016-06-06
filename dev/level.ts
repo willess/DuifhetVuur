@@ -1,3 +1,4 @@
+/// reference path="newLevel.ts"/>
 class Level {
 
     private enemyAmount: number;
@@ -6,6 +7,9 @@ class Level {
     private static killCounter: EnemiesKilled;
     private levelNumber: number;
     public levelElement: HTMLElement;
+    
+    private startWrapper: HTMLElement;
+    private startButton: HTMLElement;
     
     private match: Lucifer;
     
@@ -102,12 +106,17 @@ class Level {
             // this.levelNumber = null;
             this.playerTwo = null;
             this.levelNumber++;
+                           
             new Level(this.levelNumber, "level1");
+            
         }
 
 
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
+    private nextLevel(){
+        
+    }
 
 }
