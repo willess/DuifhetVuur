@@ -39,9 +39,6 @@ class Lucifer {
         this.posX = randomX(200, window.innerWidth - 40);
         this.posY = randomY(50, window.innerHeight - 50);
         
-        console.log("lucifer x position is " + this.posX);
-        console.log("lucifer y position is " + this.posY);
-        
         this.setLocation(this.posX, this.posY);
                  
     }
@@ -57,8 +54,14 @@ class Lucifer {
                 //this.div.setAttribute("id", "enemyDead");
                 this.div.classList.add("enemyDead");
                 this.enemyDown = true;
-                console.log("Geraaaaakt!");
-
+                var sound = new Howl({
+                    urls: ["sound/step.wav"],
+                    sprite: {
+                    intro: [0, 150000],
+                }
+            });
+           
+        sound.play('intro');
                 return true;
             }
             return false;

@@ -1,3 +1,46 @@
+var Bullet = (function () {
+    function Bullet(posX, posY, lastKey, weapon) {
+        this.enemyDown = false;
+        this.bullet = document.createElement("bullet");
+        document.body.appendChild(this.bullet);
+        this.posX = posX;
+        this.posY = posY;
+        this.startPositionX = posX;
+        this.lastKey = lastKey;
+        var sound = new Howl({
+            urls: ["sound/shot/waterShot.wav"],
+            sprite: {
+                intro: [0, 150000],
+            }
+        });
+        sound.play('intro');
+        requestAnimationFrame(this.gameLoop.bind(this));
+    }
+    Bullet.prototype.gameLoop = function () {
+        this.bulletMove();
+        requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    Bullet.prototype.bulletMove = function () {
+        if (this.lastKey == 0) {
+            this.bulletSpeed = 10;
+            this.posX += this.bulletSpeed;
+            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+            if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500) {
+                document.body.removeChild(this.bullet);
+            }
+        }
+        if (this.lastKey == 1) {
+            this.bulletSpeed = -10;
+            this.posX += this.bulletSpeed;
+            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+            this.bullet.style.left = "15px";
+            if (this.posX < 0 || this.posX < this.startPositionX - 500) {
+                document.body.removeChild(this.bullet);
+            }
+        }
+    };
+    return Bullet;
+}());
 var Lucifer = (function () {
     function Lucifer(enemyLevel) {
         this.enemyDown = false;
@@ -13,8 +56,6 @@ var Lucifer = (function () {
         }
         this.posX = randomX(200, window.innerWidth - 40);
         this.posY = randomY(50, window.innerHeight - 50);
-        console.log("lucifer x position is " + this.posX);
-        console.log("lucifer y position is " + this.posY);
         this.setLocation(this.posX, this.posY);
     }
     Lucifer.prototype.setLocation = function (x, y) {
@@ -25,7 +66,13 @@ var Lucifer = (function () {
             if (this.enemyDown == false) {
                 this.div.classList.add("enemyDead");
                 this.enemyDown = true;
-                console.log("Geraaaaakt!");
+                var sound = new Howl({
+                    urls: ["sound/step.wav"],
+                    sprite: {
+                        intro: [0, 150000],
+                    }
+                });
+                sound.play('intro');
                 return true;
             }
             return false;
@@ -37,7 +84,7 @@ var Lucifer = (function () {
     return Lucifer;
 }());
 var Character = (function () {
-    function Character(left, right, up, down, posX, posY) {
+    function Character(left, right, up, down, posX, posY, weapon, spacebar) {
         this.leftSpeed = 0;
         this.rightSpeed = 0;
         this.downSpeed = 0;
@@ -45,10 +92,17 @@ var Character = (function () {
         this.lastKey = 0;
         this.character = document.createElement("character");
         document.body.appendChild(this.character);
+        this.weaponTrue = weapon;
+        if (weapon) {
+            console.log("wapen added!");
+            this.weapon = document.createElement("waterGun");
+            this.character.appendChild(this.weapon);
+        }
         this.upkey = up;
         this.downkey = down;
         this.leftkey = left;
         this.rightkey = right;
+        this.spacebar = spacebar;
         this.posX = posX;
         this.posY = posY;
         window.addEventListener("keydown", this.onKeyDown.bind(this));
@@ -62,18 +116,31 @@ var Character = (function () {
     Character.prototype.onKeyDown = function (event) {
         switch (event.keyCode) {
             case this.upkey:
-                this.upSpeed = 5;
+                if (this.posY > 0) {
+                    this.upSpeed = 5;
+                }
                 break;
             case this.downkey:
-                this.downSpeed = 5;
+                if (this.posY < window.innerHeight - 138) {
+                    this.downSpeed = 5;
+                }
                 break;
             case this.leftkey:
-                this.leftSpeed = 5;
+                if (this.posX > 0) {
+                    this.leftSpeed = 5;
+                }
                 this.lastKey = 1;
                 break;
             case this.rightkey:
-                this.rightSpeed = 5;
+                if (this.posX < window.innerWidth - 141) {
+                    this.rightSpeed = 5;
+                }
                 this.lastKey = 0;
+                break;
+            case this.spacebar:
+                if (this.weaponTrue) {
+                    this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                }
                 break;
         }
     };
@@ -94,12 +161,14 @@ var Character = (function () {
         }
     };
     Character.prototype.move = function () {
+        this.posX = this.posX - this.leftSpeed + this.rightSpeed;
+        this.posY = this.posY - this.upSpeed + this.downSpeed;
         this.checkWalls();
         if (this.lastKey == 0) {
-            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
+            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         }
         else if (this.lastKey == 1) {
-            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+            this.character.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
         }
     };
     Character.prototype.getX = function () {
@@ -109,17 +178,17 @@ var Character = (function () {
         return this.posY;
     };
     Character.prototype.checkWalls = function () {
-        if (this.posX > -40) {
-            this.posX = this.posX - this.leftSpeed;
+        if (this.posX >= window.innerWidth - 118) {
+            this.rightSpeed = 0;
         }
-        if (this.posX < window.outerWidth) {
-            this.posX = this.posX + this.rightSpeed;
+        if (this.posX < -70) {
+            this.leftSpeed = 0;
         }
-        if (this.posY > -25) {
-            this.posY = this.posY - this.upSpeed;
+        if (this.posY >= window.innerHeight - 121) {
+            this.downSpeed = 0;
         }
-        if (this.posY < window.outerHeight - 260) {
-            this.posY = this.posY + this.downSpeed;
+        if (this.posY < -70) {
+            this.upSpeed = 0;
         }
     };
     Character.prototype.deleteCharacter = function () {
@@ -127,20 +196,48 @@ var Character = (function () {
     };
     return Character;
 }());
+var Fire = (function () {
+    function Fire() {
+        this.enemyDown = false;
+        this.hitPoints = 100;
+        this.div = document.createElement("fire");
+        document.body.appendChild(this.div);
+        function randomX(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        function randomY(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        this.posX = randomX(200, window.innerWidth - 40);
+        this.posY = randomY(50, window.innerHeight - 50);
+        this.setLocation(this.posX, this.posY);
+    }
+    Fire.prototype.setLocation = function (x, y) {
+        this.div.style.transform = "translate(" + x + "px, " + y + "px";
+    };
+    return Fire;
+}());
 var Player = (function () {
     function Player() {
     }
     return Player;
 }());
 var Startgame = (function () {
-    function Startgame() {
-        var sound = new Howl({
-            urls: ["sound/intro/smash_cops_heat.mp3"],
-            sprite: {
-                intro: [0, 150000],
-            }
-        });
-        sound.play('intro');
+    function Startgame(soundTrue) {
+        this.soundTrue = true;
+        if (soundTrue == false) {
+            this.soundTrue = false;
+        }
+        if (this.soundTrue) {
+            var sound = new Howl({
+                urls: ["sound/intro/gameMusic1.mp3"],
+                loop: true,
+                sprite: {
+                    intro: [0, 150000],
+                }
+            });
+            sound.play('intro');
+        }
         this.startScreen = document.createElement("beginscreen");
         this.startScreen.setAttribute("class", "startScreen");
         document.body.appendChild(this.startScreen);
@@ -152,6 +249,7 @@ var Startgame = (function () {
         this.nameTextField.setAttribute("id", "playerInput");
         this.nameTextField.setAttribute("type", "text");
         this.nameTextField.setAttribute("value", "");
+        this.nameTextField.setAttribute("placeholder", "Jouw naam");
         this.startWrapper.appendChild(this.nameTextField);
         this.startLogo = document.createElement("logo");
         this.startLogo.setAttribute("class", "startLogo");
@@ -175,6 +273,7 @@ var Startgame = (function () {
         this.startButton.addEventListener("click", this.createWorld.bind(this));
     }
     Startgame.prototype.createWorld = function () {
+        console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
         new Level(1, "level1");
@@ -214,8 +313,9 @@ var highscore = (function () {
         this.backButton.addEventListener("click", this.showStartScreen.bind(this));
     }
     highscore.prototype.showStartScreen = function () {
+        var soundTrue = false;
         this.scoreScreen.remove();
-        this.Startgame = new Startgame();
+        this.Startgame = new Startgame(soundTrue);
     };
     return highscore;
 }());
@@ -227,36 +327,39 @@ var Level = (function () {
             case 1:
                 console.log("Level 1");
                 this.matches = 5;
-                this.fire = 0;
+                this.fires = 0;
                 this.weapon = false;
                 break;
             case 2:
                 console.log("level 2!");
                 this.matches = 20;
-                this.fire = 4;
+                this.fires = 4;
+                this.weapon = true;
                 break;
             case 3:
                 console.log("level 3!");
                 this.matches = 10;
-                this.fire = 8;
+                this.fires = 8;
+                this.weapon = true;
                 break;
             case 4:
                 console.log("level 4!");
                 this.matches = 10;
-                this.fire = 10;
+                this.fires = 10;
+                this.weapon = true;
                 break;
             case 5:
                 console.log("level 5!");
                 this.matches = 10;
-                this.fire = 12;
+                this.fires = 12;
+                this.weapon = true;
                 break;
             default:
                 break;
         }
         this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
-        this.playerTwo = new Character(65, 68, 87, 83, 0, 150);
-        this.playerOne = new Character(37, 39, 38, 40, 0, 250);
+        this.playerTwo = new Character(65, 68, 87, 83, 0, 150, this.weapon, 32);
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
             Level.killCounter = new EnemiesKilled(this.matches);
@@ -269,11 +372,15 @@ var Level = (function () {
             this.match = new Lucifer(levelNumber);
             this.matchArray.push(this.match);
         }
+        for (var i = 0; i < this.fires; i++) {
+            this.fire = new Fire();
+            this.fireArray.push(this.fire);
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     Level.prototype.gameLoop = function () {
         for (var i = 0; i < this.matchArray.length; i++) {
-            if (this.matchArray[i].checkCollision(this.playerOne) || this.matchArray[i].checkCollision(this.playerTwo)) {
+            if (this.matchArray[i].checkCollision(this.playerTwo)) {
                 Level.killCounter.updateScores();
             }
         }
@@ -282,7 +389,6 @@ var Level = (function () {
                 var c = _a[_i];
                 c.deleteMatch();
             }
-            this.playerOne.deleteCharacter();
             this.playerTwo.deleteCharacter();
             this.matchArray = null;
             this.levelElement = null;
@@ -291,8 +397,6 @@ var Level = (function () {
             new Level(this.levelNumber, "level1");
         }
         requestAnimationFrame(this.gameLoop.bind(this));
-    };
-    Level.prototype.nextLevel = function () {
     };
     return Level;
 }());
@@ -337,7 +441,7 @@ var EnemiesKilled = (function () {
     }
     EnemiesKilled.prototype.updateScores = function () {
         this.deathCount++;
-        this.div.innerHTML = "Je hebt al " + this.deathCount + " fakkel(s) gedoofd van de " + this.toKillEnemies + "  fakkels!";
+        this.div.innerHTML = "Fakkels:    " + this.deathCount + "/" + this.toKillEnemies;
         this.isLevelComplete();
     };
     EnemiesKilled.prototype.isLevelComplete = function () {

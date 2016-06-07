@@ -217,7 +217,7 @@ level5 {
 }
 
 character {
-    background-image: url(../images/character/Pidgeon_left.png);
+    background-image: url(../images/character/Pidgeon_right.png);
     background-repeat: no-repeat;
     background-color: none;
     width: 178px;
@@ -241,4 +241,26 @@ score{
     font-size: 25px;
     color: white;
     z-index: 10;
+}
+
+fire {
+    background-image: url(../images/enemies/fire.gif);
+    width: 150px;
+    height: 150px;
+}
+
+waterGun {
+    background-image: url(../images/weapons/waterGun.gif);
+    width: 80px;
+    height: 80px;
+    top: 60px;
+    left: 80px;
+}
+
+bullet {
+    background-image: url(../images/projectiles/bullet.gif);
+    width: 45px;
+    height: 45px;
+    top: 75px;
+    left: 120px;
 }

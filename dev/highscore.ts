@@ -41,8 +41,9 @@ class highscore{
     }
     
     private showStartScreen(){
+        var soundTrue = false;
         this.scoreScreen.remove();
-        this.Startgame = new Startgame();
+        this.Startgame = new Startgame(soundTrue);
     }
 }
 

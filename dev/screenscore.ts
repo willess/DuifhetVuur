@@ -19,7 +19,7 @@ class EnemiesKilled {
     public updateScores() {
         this.deathCount++;
         
-        this.div.innerHTML = "Je hebt al " + this.deathCount + " fakkel(s) gedoofd van de " + this.toKillEnemies + "  fakkels!";
+        this.div.innerHTML ="Fakkels:    "+ this.deathCount + "/" + this.toKillEnemies;
 
         this.isLevelComplete();
     }

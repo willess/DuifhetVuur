@@ -28,17 +28,24 @@ class Startgame {
     private howToPlay: HTMLElement;
     private highscore: HTMLElement;
     private highscoreView: any;
-
-constructor() {
+    private soundTrue: boolean = true;
     
+constructor(soundTrue: boolean) {
+    
+    if(soundTrue == false){
+        this.soundTrue = false;
+    }
+    
+    if(this.soundTrue){
             var sound = new Howl({
-                urls: ["sound/intro/smash_cops_heat.mp3"],
+                urls: ["sound/intro/gameMusic1.mp3"],
+                loop: true,
                 sprite: {
                     intro: [0, 150000],
                 }
             });
-           
-        sound.play('intro');
+                sound.play('intro');
+    }    
 
         //background startgame
         this.startScreen = document.createElement("beginscreen");
@@ -56,6 +63,7 @@ constructor() {
         this.nameTextField.setAttribute("id", "playerInput");
         this.nameTextField.setAttribute("type", "text");
         this.nameTextField.setAttribute("value", "");
+        this.nameTextField.setAttribute("placeholder", "Jouw naam");
         this.startWrapper.appendChild(this.nameTextField);
 
         //logo top startgame
@@ -87,12 +95,13 @@ constructor() {
         this.startWrapper.appendChild(this.startCredits);
         this.startCredits.addEventListener("click", this.creditScreen.bind(this));
 
-
         this.startButton.addEventListener("click", this.createWorld.bind(this));
         
     }
 
     private createWorld() {
+        // this.playerValue = this.nameTextField;
+        console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
         new Level(1, "level1");
