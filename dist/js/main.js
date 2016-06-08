@@ -39,6 +39,12 @@ var Bullet = (function () {
             }
         }
     };
+    Bullet.prototype.getBulletX = function () {
+        return this.posX;
+    };
+    Bullet.prototype.getBulletY = function () {
+        return this.posX;
+    };
     return Bullet;
 }());
 var Lucifer = (function () {
@@ -90,6 +96,7 @@ var Character = (function () {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.lastKey = 0;
+        this.bulletArray = [];
         this.character = document.createElement("character");
         document.body.appendChild(this.character);
         this.weaponTrue = weapon;
@@ -140,6 +147,7 @@ var Character = (function () {
             case this.spacebar:
                 if (this.weaponTrue) {
                     this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    this.bulletArray.push(this.addBullet);
                 }
                 break;
         }
@@ -360,6 +368,7 @@ var Level = (function () {
         this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
         this.playerTwo = new Character(65, 68, 87, 83, 0, 150, this.weapon, 32);
+        this.playerOne = new Character(37, 39, 38, 40, 0, 250, this.weapon, 13);
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
             Level.killCounter = new EnemiesKilled(this.matches);
@@ -380,7 +389,7 @@ var Level = (function () {
     }
     Level.prototype.gameLoop = function () {
         for (var i = 0; i < this.matchArray.length; i++) {
-            if (this.matchArray[i].checkCollision(this.playerTwo)) {
+            if (this.matchArray[i].checkCollision(this.playerTwo) || this.matchArray[i].checkCollision(this.playerOne)) {
                 Level.killCounter.updateScores();
             }
         }
@@ -389,6 +398,7 @@ var Level = (function () {
                 var c = _a[_i];
                 c.deleteMatch();
             }
+            this.playerOne.deleteCharacter();
             this.playerTwo.deleteCharacter();
             this.matchArray = null;
             this.levelElement = null;
