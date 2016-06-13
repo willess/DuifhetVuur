@@ -288,7 +288,7 @@ var Startgame = (function () {
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(1, "level1");
+        new Level(5, "level1");
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
