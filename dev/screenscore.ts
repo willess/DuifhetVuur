@@ -31,6 +31,4 @@ class EnemiesKilled {
         }
         return false;
     }
-    
-    
 }

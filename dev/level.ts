@@ -68,7 +68,7 @@ class Level {
         document.body.appendChild(this.levelElement);
         
         this.playerTwo = new Character(65, 68, 87, 83, 0, 150, this.weapon, 32);
-        // this.playerOne =  new Character(37, 39, 38, 40, 0, 250, this.weapon, 32);
+        this.playerOne =  new Character(37, 39, 38, 40, 0, 250, this.weapon, 13);
         
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
@@ -96,7 +96,7 @@ class Level {
 
 
         for (var i = 0; i < this.matchArray.length; i++) {
-            if (this.matchArray[i].checkCollision(this.playerTwo)) {
+            if (this.matchArray[i].checkCollision(this.playerTwo) || this.matchArray[i].checkCollision(this.playerOne)) {
                 Level.killCounter.updateScores();
             }
         }
@@ -106,7 +106,7 @@ class Level {
                 c.deleteMatch();
             }
            
-            // this.playerOne.deleteCharacter();
+            this.playerOne.deleteCharacter();
             this.playerTwo.deleteCharacter();
             // this.playerOne = null;
             this.matchArray = null;
@@ -114,6 +114,7 @@ class Level {
             // this.levelNumber = null;
             this.playerTwo = null;
             this.levelNumber++;
+<<<<<<< HEAD
                 if(this.levelNumber == 6){
                     new CreditRoll();
                 }
@@ -122,9 +123,11 @@ class Level {
                 }               
             
             
+=======
+            new Level(this.levelNumber, "level1");
+            // n = null;
+>>>>>>> origin/master
         }
-
-
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 

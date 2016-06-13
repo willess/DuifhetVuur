@@ -30,6 +30,8 @@ class Character {
     private lastKey: number = 0;
     
     private weaponTrue: boolean;
+    
+    private bulletArray = [];
 
     constructor(left: number, right: number, up: number, down: number, posX: number, posY: number, weapon: boolean, spacebar: number) {
 
@@ -96,6 +98,7 @@ class Character {
                 case this.spacebar:
                 if(this.weaponTrue){
                     this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    this.bulletArray.push(this.addBullet);
                 }
                 break;
         }

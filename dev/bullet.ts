@@ -61,4 +61,10 @@ class Bullet {
             }
         }
     }
+    public getBulletX() {
+        return this.posX;
+    }
+    public getBulletY() {
+        return this.posX;
+    }
 }
