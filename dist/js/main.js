@@ -1,6 +1,7 @@
 var Bullet = (function () {
     function Bullet(posX, posY, lastKey, weapon) {
         this.enemyDown = false;
+        this.bulletDirection = 1;
         this.bullet = document.createElement("bullet");
         document.body.appendChild(this.bullet);
         this.posX = posX;
@@ -23,27 +24,18 @@ var Bullet = (function () {
     Bullet.prototype.bulletMove = function () {
         if (this.lastKey == 0) {
             this.bulletSpeed = 10;
-            this.posX += this.bulletSpeed;
-            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
-            if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500) {
-                document.body.removeChild(this.bullet);
-            }
+            this.bulletDirection = 1;
         }
         if (this.lastKey == 1) {
+            this.bulletDirection = -1;
             this.bulletSpeed = -10;
-            this.posX += this.bulletSpeed;
-            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
             this.bullet.style.left = "15px";
-            if (this.posX < 0 || this.posX < this.startPositionX - 500) {
-                document.body.removeChild(this.bullet);
-            }
         }
-    };
-    Bullet.prototype.getBulletX = function () {
-        return this.posX;
-    };
-    Bullet.prototype.getBulletY = function () {
-        return this.posX;
+        this.posX += this.bulletSpeed;
+        this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(" + this.bulletDirection + ")";
+        if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500 || this.posX < 0 || this.posX < this.startPositionX - 500) {
+            this.bullet.remove();
+        }
     };
     return Bullet;
 }());
@@ -112,15 +104,13 @@ var Character = (function () {
         this.spacebar = spacebar;
         this.posX = posX;
         this.posY = posY;
-        window.addEventListener("keydown", this.onKeyDown.bind(this));
-        window.addEventListener("keyup", this.onKeyUp.bind(this));
-        requestAnimationFrame(this.gameLoop.bind(this));
+        this.keyDownFunction = this.onKeyDown.bind(this);
+        this.keyUpFunction = this.onKeyUp.bind(this);
+        window.addEventListener("keydown", this.keyDownFunction);
+        window.addEventListener("keyup", this.keyUpFunction);
     }
-    Character.prototype.gameLoop = function () {
-        this.move();
-        requestAnimationFrame(this.gameLoop.bind(this));
-    };
     Character.prototype.onKeyDown = function (event) {
+        console.log("key down " + this.upkey);
         switch (event.keyCode) {
             case this.upkey:
                 if (this.posY > 0) {
@@ -146,11 +136,16 @@ var Character = (function () {
                 break;
             case this.spacebar:
                 if (this.weaponTrue) {
-                    this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    this.bulletArray.push(this.addBullet);
+                    console.log("space clicked!");
+                    var b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    this.bulletArray.push(b);
+                    this.addBullet;
                 }
                 break;
         }
+    };
+    Character.prototype.bulletToCharacter = function (b) {
+        return b;
     };
     Character.prototype.onKeyUp = function (event) {
         switch (event.keyCode) {
@@ -200,7 +195,9 @@ var Character = (function () {
         }
     };
     Character.prototype.deleteCharacter = function () {
-        document.body.removeChild(this.character);
+        window.removeEventListener("keydown", this.keyDownFunction);
+        window.removeEventListener("keyup", this.keyUpFunction);
+        this.character.remove();
     };
     return Character;
 }());
@@ -244,6 +241,7 @@ var Startgame = (function () {
         }
         if (this.soundTrue) {
             var sound = new Howl({
+                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -458,7 +456,12 @@ var Level = (function () {
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
+    Level.prototype.addBullet = function () {
+        console.log("bulletttt");
+    };
     Level.prototype.gameLoop = function () {
+        this.playerTwo.move();
+        this.playerOne.move();
         for (var i = 0; i < this.matchArray.length; i++) {
             if (this.matchArray[i].checkCollision(this.playerTwo) || this.matchArray[i].checkCollision(this.playerOne)) {
                 Level.killCounter.updateScores();
@@ -481,13 +484,29 @@ var Level = (function () {
             else {
                 new Level(this.levelNumber, "level1");
             }
+            new Level(this.levelNumber, "level1");
+            this.endLevel();
         }
         requestAnimationFrame(this.gameLoop.bind(this));
+    };
+    Level.prototype.endLevel = function () {
+        for (var _i = 0, _a = this.matchArray; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.deleteMatch();
+        }
+        this.playerOne.deleteCharacter();
+        this.playerTwo.deleteCharacter();
+        this.playerOne = null;
+        this.playerTwo = null;
+        this.matchArray = null;
+        this.levelElement = null;
+        this.levelNumber++;
+        new Level(this.levelNumber, "level1");
     };
     return Level;
 }());
 window.addEventListener("load", function () {
-    new Startgame();
+    new Startgame(true);
 });
 var screenScore = (function () {
     function screenScore() {
