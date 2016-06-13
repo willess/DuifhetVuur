@@ -91,12 +91,22 @@ class Level {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-    public addBullet() {
-        console.log("bulletttt");
-        // add a bullet to the bullet array
-    }
-
     private gameLoop() {
+
+        // console.log(this.playerTwo.bulletArray);
+
+        for (var i = 0; i < this.fireArray.length; i++) {
+            
+            for (var key of this.playerTwo.bulletArray) {
+                    
+                    if(this.fireArray[i].checkFireCollision(key)) {
+                        console.log("hpdddddd");
+
+                    }
+
+                }
+            }
+        
         this.playerTwo.move();
         this.playerOne.move();
 
@@ -116,10 +126,12 @@ class Level {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-
     private endLevel() {
         for (var c of this.matchArray) {
             c.deleteMatch();
+        }
+        for (var c of this.fireArray) {
+            c.deleteFire();
         }
 
         this.playerOne.deleteCharacter();
@@ -127,6 +139,7 @@ class Level {
         this.playerOne = null;
         this.playerTwo = null;
         this.matchArray = null;
+        this.fireArray = null;
         this.levelElement = null;
         this.levelNumber++;
 
@@ -153,4 +166,5 @@ class Level {
         new Level(this.levelNumber, "level1");
         }
     }
+
 }

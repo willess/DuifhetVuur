@@ -71,5 +71,4 @@ class Lucifer {
     public deleteMatch(){
         document.body.removeChild(this.div);
     }
-    
 }

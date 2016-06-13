@@ -33,4 +33,30 @@ class Fire {
         public setLocation(x:number, y:number) {
             this.div.style.transform = "translate(" + x + "px, " + y + "px";
     }
+        public deleteFire(){
+        
+        // document.body.removeChild(this.div);
+        
+    }
+            public checkFireCollision(pad: Bullet): boolean {
+        if (this.posX <= pad.getFireX() + 80 && this.posX >= pad.getFireX() - 80 && this.posY <= pad.getFireY() + 50 && this.posY >= pad.getFireY() - 10) {
+            //Als character raakt lucifer dan ...
+
+            if (this.enemyDown == false) {
+                this.div.remove();
+
+                this.enemyDown = true;
+                var sound = new Howl({
+                    urls: ["sound/step.wav"],
+                    sprite: {
+                    intro: [0, 150000],
+                }
+            });
+           
+        sound.play('intro');
+                return true;
+            }
+            return false;
+        }
+    }
 }

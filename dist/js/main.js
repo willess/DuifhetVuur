@@ -35,7 +35,14 @@ var Bullet = (function () {
         this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(" + this.bulletDirection + ")";
         if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500 || this.posX < 0 || this.posX < this.startPositionX - 500) {
             this.bullet.remove();
+            this.bullet = null;
         }
+    };
+    Bullet.prototype.getFireX = function () {
+        return this.posX;
+    };
+    Bullet.prototype.getFireY = function () {
+        return this.posY;
     };
     return Bullet;
 }());
@@ -136,13 +143,16 @@ var Character = (function () {
                 break;
             case this.spacebar:
                 if (this.weaponTrue) {
+                    this.addBullet();
                     console.log("space clicked!");
-                    var b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    this.bulletArray.push(b);
-                    this.addBullet;
                 }
                 break;
         }
+    };
+    Character.prototype.addBullet = function () {
+        var b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+        this.bulletArray.push(b);
+        return this.bulletArray;
     };
     Character.prototype.bulletToCharacter = function (b) {
         return b;
@@ -368,6 +378,25 @@ var Fire = (function () {
     Fire.prototype.setLocation = function (x, y) {
         this.div.style.transform = "translate(" + x + "px, " + y + "px";
     };
+    Fire.prototype.deleteFire = function () {
+    };
+    Fire.prototype.checkFireCollision = function (pad) {
+        if (this.posX <= pad.getFireX() + 80 && this.posX >= pad.getFireX() - 80 && this.posY <= pad.getFireY() + 50 && this.posY >= pad.getFireY() - 10) {
+            if (this.enemyDown == false) {
+                this.div.remove();
+                this.enemyDown = true;
+                var sound = new Howl({
+                    urls: ["sound/step.wav"],
+                    sprite: {
+                        intro: [0, 150000],
+                    }
+                });
+                sound.play('intro');
+                return true;
+            }
+            return false;
+        }
+    };
     return Fire;
 }());
 var highscore = (function () {
@@ -455,10 +484,15 @@ var Level = (function () {
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
-    Level.prototype.addBullet = function () {
-        console.log("bulletttt");
-    };
     Level.prototype.gameLoop = function () {
+        for (var i = 0; i < this.fireArray.length; i++) {
+            for (var _i = 0, _a = this.playerTwo.bulletArray; _i < _a.length; _i++) {
+                var key = _a[_i];
+                if (this.fireArray[i].checkFireCollision(key)) {
+                    console.log("hpdddddd");
+                }
+            }
+        }
         this.playerTwo.move();
         this.playerOne.move();
         for (var i = 0; i < this.matchArray.length; i++) {
@@ -476,11 +510,16 @@ var Level = (function () {
             var c = _a[_i];
             c.deleteMatch();
         }
+        for (var _b = 0, _c = this.fireArray; _b < _c.length; _b++) {
+            var c = _c[_b];
+            c.deleteFire();
+        }
         this.playerOne.deleteCharacter();
         this.playerTwo.deleteCharacter();
         this.playerOne = null;
         this.playerTwo = null;
         this.matchArray = null;
+        this.fireArray = null;
         this.levelElement = null;
         this.levelNumber++;
         if (this.levelNumber == 2) {

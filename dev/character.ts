@@ -15,7 +15,6 @@ class Character {
     private rightkey: number;
     
     private spacebar: number;
-    private addBullet: Bullet;
 
     //speed
     private leftSpeed: number = 0;
@@ -34,7 +33,7 @@ class Character {
     
     private weaponTrue: boolean;
     
-    private bulletArray = [];
+    public bulletArray = [];
 
     constructor(left: number, right: number, up: number, down: number, posX: number, posY: number, weapon: boolean, spacebar: number) {
         
@@ -99,16 +98,22 @@ class Character {
                 break;
              case this.spacebar:
                 if(this.weaponTrue){
+                    this.addBullet();
                     console.log("space clicked!");
                     // this.game.addBullet();
                     // this.addBullet;
                     // dit in de level.ts
-                    let b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    this.bulletArray.push(b);
-                    this.addBullet;                    
+                    // let b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    // this.bulletArray.push(b);
                 }
                 break;
         }
+    }
+
+    public addBullet() {
+        let b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+        this.bulletArray.push(b);
+        return this.bulletArray;
     }
     
     public bulletToCharacter (b){

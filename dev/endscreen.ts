@@ -41,7 +41,6 @@ class EndScreen {
         this.background.appendChild(this.highScore);
         this.highScore.style.marginTop = "495px";
         this.highScore.addEventListener("click", this.score.bind(this));
-        
     }
     
     private exit(){
