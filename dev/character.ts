@@ -140,6 +140,7 @@ class Character {
         this.posY = this.posY - this.upSpeed + this.downSpeed;
 
     this.checkWalls();
+        this.checkWalls();
 
         // de div positie aanpassen met transform - tip: scaleX kan je gebruiken om de andere kant op te kijken
         if (this.lastKey == 0) {
