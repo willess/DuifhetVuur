@@ -361,3 +361,28 @@ score {
     width: 200px;
     height: 200px;
 }
+
+#middle-screen {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    z-index: 98;
+    text-align: center;
+    font-family: game-font;
+    font-size: 50px;
+    color: white;
+    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+    -moz-animation: fadein 2s; /* Firefox < 16 */
+    -ms-animation: fadein 2s; /* Internet Explorer */
+    -o-animation: fadein 2s; /* Opera < 12.1 */
+    animation: fadein 2s;
+}
+
+#next-text {
+    z-index: 99;
+    text-align: center;
+    font-family: game-font;
+    font-size: 50px;
+    color: white;
+    margin-top: 200px
+}

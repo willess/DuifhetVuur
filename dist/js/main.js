@@ -241,7 +241,6 @@ var Startgame = (function () {
         }
         if (this.soundTrue) {
             var sound = new Howl({
-                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -288,7 +287,7 @@ var Startgame = (function () {
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(5, "level1");
+        new Level(1, "level1");
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
@@ -484,6 +483,18 @@ var Level = (function () {
         this.matchArray = null;
         this.levelElement = null;
         this.levelNumber++;
+        if (this.levelNumber == 2) {
+            new middleScreen("Level 1");
+        }
+        if (this.levelNumber == 3) {
+            new middleScreen("Level 2");
+        }
+        if (this.levelNumber == 4) {
+            new middleScreen("Level 3");
+        }
+        if (this.levelNumber == 5) {
+            new middleScreen("Level 4");
+        }
         if (this.levelNumber > 5) {
             new CreditRoll();
         }
@@ -496,6 +507,32 @@ var Level = (function () {
 window.addEventListener("load", function () {
     new Startgame(true);
 });
+var middleScreen = (function () {
+    function middleScreen(level) {
+        this.count = 10;
+        this.middle = document.createElement("middlescreen");
+        this.middle.setAttribute("id", "middle-screen");
+        this.middle.innerHTML = "" + level + " uitgespeeld!" + "<br />" + "Je score is score";
+        document.body.appendChild(this.middle);
+        this.text = document.createElement("nexttext");
+        this.text.setAttribute("id", "next-text");
+        this.text.innerHTML = "Het volgende level begint over " + this.count;
+        document.body.appendChild(this.text);
+        this.timer = setInterval(this.counter.bind(this), 1000);
+    }
+    middleScreen.prototype.counter = function () {
+        this.count--;
+        console.log(this.count);
+        if (this.count == 0) {
+            console.log("volgende");
+            clearInterval(this.timer);
+            document.body.removeChild(this.middle);
+            document.body.removeChild(this.text);
+        }
+        this.text.innerHTML = "Het volgende level begint over " + this.count;
+    };
+    return middleScreen;
+}());
 var screenScore = (function () {
     function screenScore() {
     }

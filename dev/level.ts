@@ -22,6 +22,8 @@ class Level {
 
     private weapon: boolean;
 
+    public level: middleScreen;
+
     constructor(levelNumber: number, toUseBackground: string) {
 
         switch (levelNumber) {
@@ -127,6 +129,22 @@ class Level {
         this.matchArray = null;
         this.levelElement = null;
         this.levelNumber++;
+
+        if(this.levelNumber == 2){
+            new middleScreen("Level 1");
+        }
+
+        if(this.levelNumber == 3){
+            new middleScreen("Level 2");
+        }
+
+        if(this.levelNumber == 4){
+            new middleScreen("Level 3");
+        }
+
+        if(this.levelNumber == 5){
+            new middleScreen("Level 4");
+        }
 
         if(this.levelNumber > 5) {
             new CreditRoll();
