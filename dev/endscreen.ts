@@ -12,9 +12,7 @@ class EndScreen {
     private endGame:HTMLElement;
     private highScore:HTMLElement;
     
-    constructor() {
-        console.log("HEEY HIJS DOOR!!");
-        
+    constructor() {        
         //background
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");

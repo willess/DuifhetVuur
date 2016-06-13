@@ -288,7 +288,7 @@ var Startgame = (function () {
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(1, "level1");
+        new Level(5, "level1");
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
@@ -309,7 +309,6 @@ var Startgame = (function () {
 }());
 var EndScreen = (function () {
     function EndScreen() {
-        console.log("HEEY HIJS DOOR!!");
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
         this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je score is score";
@@ -485,7 +484,12 @@ var Level = (function () {
         this.matchArray = null;
         this.levelElement = null;
         this.levelNumber++;
-        new Level(this.levelNumber, "level1");
+        if (this.levelNumber > 5) {
+            new CreditRoll();
+        }
+        else {
+            new Level(this.levelNumber, "level1");
+        }
     };
     return Level;
 }());

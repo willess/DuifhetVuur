@@ -128,8 +128,11 @@ class Level {
         this.levelElement = null;
         this.levelNumber++;
 
-
-
+        if(this.levelNumber > 5) {
+            new CreditRoll();
+        }
+        else{
         new Level(this.levelNumber, "level1");
+        }
     }
 }
