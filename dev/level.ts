@@ -21,8 +21,6 @@ class Level {
     private fireArray = [];
 
     private weapon: boolean;
-    
-
 
     constructor(levelNumber: number, toUseBackground: string) {
 
@@ -54,8 +52,8 @@ class Level {
                 break;
             case 5:
                 console.log("level 5!");
-                this.matches = 1;
-                this.fires = 1;
+                this.matches = 10;
+                this.fires = 12;
                 this.weapon = true;
                 break;
 
@@ -111,33 +109,6 @@ class Level {
         // bullet.update();
 
         if (Level.killCounter.isLevelComplete()) {
-
-            for (var c of this.matchArray) {
-                c.deleteMatch();
-            }
-           
-            this.playerOne.deleteCharacter();
-            this.playerTwo.deleteCharacter();
-            // this.playerOne = null;
-            this.matchArray = null;
-            this.levelElement = null;
-            // this.levelNumber = null;
-            this.playerTwo = null;
-            this.levelNumber++;
-
-                if(this.levelNumber == 6){
-                    new CreditRoll();
-                }
-                else {
-                    new Level(this.levelNumber, "level1");
-                }               
-            
-            
-
-            new Level(this.levelNumber, "level1");
-            // n = null;
-
-
             this.endLevel();
         }
         requestAnimationFrame(this.gameLoop.bind(this));

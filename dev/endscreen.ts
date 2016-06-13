@@ -59,7 +59,7 @@ class EndScreen {
     private again(){
         console.log("again");
         document.body.removeChild(this.background);
-        new Startgame();
+        new Startgame(true);
     }
     
     private score() {
