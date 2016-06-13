@@ -8,6 +8,8 @@ class CreditRoll {
     private count: number = 0;
     private i:number;
     private timer:number;
+
+    // test
     
     constructor() {
         console.log("finalscreen");
