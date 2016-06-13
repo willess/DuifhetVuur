@@ -196,26 +196,32 @@ var Character = (function () {
     };
     return Character;
 }());
-var Fire = (function () {
-    function Fire() {
-        this.enemyDown = false;
-        this.hitPoints = 100;
-        this.div = document.createElement("fire");
-        document.body.appendChild(this.div);
-        function randomX(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-        function randomY(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-        this.posX = randomX(200, window.innerWidth - 40);
-        this.posY = randomY(50, window.innerHeight - 50);
-        this.setLocation(this.posX, this.posY);
+var CreditRoll = (function () {
+    function CreditRoll() {
+        this.count = 0;
+        console.log("finalscreen");
+        this.credit = document.createElement("creditscreen");
+        this.credit.setAttribute("id", "credits");
+        document.body.appendChild(this.credit);
+        this.wrapper = document.createElement("creditwrapper");
+        this.wrapper.setAttribute("id", "creditwrapper");
+        this.wrapper.innerHTML = "Game is made by:" + "<br />" + "Lennart van Welzen" + "<br />" +
+            "Wilco van Dijk" + "<br />" + "Jim Heukels" + "<br />" + "Lorenzo Kammeron"
+            + "<br />" + "Tom Vrijmoet" + "<br />";
+        document.body.appendChild(this.wrapper);
+        this.timer = setInterval(this.counter.bind(this), 1000);
     }
-    Fire.prototype.setLocation = function (x, y) {
-        this.div.style.transform = "translate(" + x + "px, " + y + "px";
+    CreditRoll.prototype.counter = function () {
+        this.count++;
+        console.log(this.count);
+        if (this.count == 5) {
+            clearInterval(this.timer);
+            document.body.removeChild(this.credit);
+            document.body.removeChild(this.wrapper);
+            new EndScreen();
+        }
     };
-    return Fire;
+    return CreditRoll;
 }());
 var Player = (function () {
     function Player() {
@@ -230,7 +236,6 @@ var Startgame = (function () {
         }
         if (this.soundTrue) {
             var sound = new Howl({
-                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -276,7 +281,7 @@ var Startgame = (function () {
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(1, "level1");
+        new Level(5, "level1");
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
@@ -291,8 +296,74 @@ var Startgame = (function () {
     Startgame.prototype.creditScreen = function () {
         this.startLogo.remove();
         this.startWrapper.remove();
+        new CreditRoll();
     };
     return Startgame;
+}());
+var EndScreen = (function () {
+    function EndScreen() {
+        console.log("HEEY HIJS DOOR!!");
+        this.background = document.createElement("back");
+        this.background.setAttribute("id", "backend");
+        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je score is score";
+        document.body.appendChild(this.background);
+        this.playAgain = document.createElement("button");
+        this.playAgain.setAttribute("id", "againbutton");
+        this.playAgain.innerHTML = "Opnieuw spelen?";
+        this.background.appendChild(this.playAgain);
+        this.playAgain.addEventListener("click", this.again.bind(this));
+        this.endGame = document.createElement("button");
+        this.endGame.setAttribute("id", "againbutton");
+        this.endGame.innerHTML = "Spel stoppen";
+        this.endGame.style.marginTop = "350px";
+        this.background.appendChild(this.endGame);
+        this.endGame.addEventListener("click", this.exit.bind(this));
+        this.highScore = document.createElement("button");
+        this.highScore.setAttribute("id", "againbutton");
+        this.highScore.innerHTML = "Highscore";
+        this.background.appendChild(this.highScore);
+        this.highScore.style.marginTop = "495px";
+        this.highScore.addEventListener("click", this.score.bind(this));
+    }
+    EndScreen.prototype.exit = function () {
+        console.log("exit");
+        var f = confirm("Close Window?");
+        if (f == true) {
+            console.log("exit");
+            window.close();
+        }
+    };
+    EndScreen.prototype.again = function () {
+        console.log("again");
+        document.body.removeChild(this.background);
+        new Startgame();
+    };
+    EndScreen.prototype.score = function () {
+        console.log("score");
+        new highscore();
+    };
+    return EndScreen;
+}());
+var Fire = (function () {
+    function Fire() {
+        this.enemyDown = false;
+        this.hitPoints = 100;
+        this.div = document.createElement("fire");
+        document.body.appendChild(this.div);
+        function randomX(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        function randomY(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        this.posX = randomX(200, window.innerWidth - 40);
+        this.posY = randomY(50, window.innerHeight - 50);
+        this.setLocation(this.posX, this.posY);
+    }
+    Fire.prototype.setLocation = function (x, y) {
+        this.div.style.transform = "translate(" + x + "px, " + y + "px";
+    };
+    return Fire;
 }());
 var highscore = (function () {
     function highscore() {
@@ -350,8 +421,8 @@ var Level = (function () {
                 break;
             case 5:
                 console.log("level 5!");
-                this.matches = 10;
-                this.fires = 12;
+                this.matches = 1;
+                this.fires = 1;
                 this.weapon = true;
                 break;
             default:
@@ -394,7 +465,12 @@ var Level = (function () {
             this.levelElement = null;
             this.playerTwo = null;
             this.levelNumber++;
-            new Level(this.levelNumber, "level1");
+            if (this.levelNumber == 6) {
+                new CreditRoll();
+            }
+            else {
+                new Level(this.levelNumber, "level1");
+            }
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     };

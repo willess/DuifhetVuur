@@ -21,6 +21,8 @@ class Level {
     private fireArray = [];
     
     private weapon: boolean;
+    
+
 
     constructor(levelNumber: number, toUseBackground: string) {
        
@@ -53,11 +55,11 @@ class Level {
                 break;
             case 5:
                 console.log("level 5!");
-                this.matches = 10;
-                this.fires = 12;
+                this.matches = 1;
+                this.fires = 1;
                 this.weapon = true;
                 break;
-        
+                        
             default:
                 break;
         }
@@ -112,8 +114,13 @@ class Level {
             // this.levelNumber = null;
             this.playerTwo = null;
             this.levelNumber++;
-                           
-            new Level(this.levelNumber, "level1");
+                if(this.levelNumber == 6){
+                    new CreditRoll();
+                }
+                else {
+                    new Level(this.levelNumber, "level1");
+                }               
+            
             
         }
 
