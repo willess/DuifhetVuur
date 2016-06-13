@@ -16,7 +16,7 @@ class Startgame {
     private startHowToPlay: HTMLElement;
     private startScreen: HTMLElement;
     private startLogo: HTMLElement;
-    public nameTextField: HTMLElement;
+    public nameTextField: HTMLInputElement;
     public playerValue: String;
 
     private scoreScreen: HTMLElement;
@@ -100,6 +100,7 @@ constructor(soundTrue: boolean) {
     }
 
     private createWorld() {
+        this.playerValue = this.nameTextField.value;       
         // this.playerValue = this.nameTextField;
         console.log(this.playerValue);
         this.startScreen.remove();

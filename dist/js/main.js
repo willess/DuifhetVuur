@@ -1,7 +1,6 @@
 var Bullet = (function () {
     function Bullet(posX, posY, lastKey, weapon) {
         this.enemyDown = false;
-        this.bulletDirection = 1;
         this.bullet = document.createElement("bullet");
         document.body.appendChild(this.bullet);
         this.posX = posX;
@@ -24,18 +23,27 @@ var Bullet = (function () {
     Bullet.prototype.bulletMove = function () {
         if (this.lastKey == 0) {
             this.bulletSpeed = 10;
-            this.bulletDirection = 1;
+            this.posX += this.bulletSpeed;
+            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+            if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500) {
+                document.body.removeChild(this.bullet);
+            }
         }
         if (this.lastKey == 1) {
-            this.bulletDirection = -1;
             this.bulletSpeed = -10;
+            this.posX += this.bulletSpeed;
+            this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(-1)";
             this.bullet.style.left = "15px";
+            if (this.posX < 0 || this.posX < this.startPositionX - 500) {
+                document.body.removeChild(this.bullet);
+            }
         }
-        this.posX += this.bulletSpeed;
-        this.bullet.style.transform = "translate(" + this.posX + "px, " + this.posY + "px) scaleX(" + this.bulletDirection + ")";
-        if (this.posX > window.innerWidth || this.posX > this.startPositionX + 500 || this.posX < 0 || this.posX < this.startPositionX - 500) {
-            this.bullet.remove();
-        }
+    };
+    Bullet.prototype.getBulletX = function () {
+        return this.posX;
+    };
+    Bullet.prototype.getBulletY = function () {
+        return this.posX;
     };
     return Bullet;
 }());
@@ -104,13 +112,15 @@ var Character = (function () {
         this.spacebar = spacebar;
         this.posX = posX;
         this.posY = posY;
-        this.keyDownFunction = this.onKeyDown.bind(this);
-        this.keyUpFunction = this.onKeyUp.bind(this);
-        window.addEventListener("keydown", this.keyDownFunction);
-        window.addEventListener("keyup", this.keyUpFunction);
+        window.addEventListener("keydown", this.onKeyDown.bind(this));
+        window.addEventListener("keyup", this.onKeyUp.bind(this));
+        requestAnimationFrame(this.gameLoop.bind(this));
     }
+    Character.prototype.gameLoop = function () {
+        this.move();
+        requestAnimationFrame(this.gameLoop.bind(this));
+    };
     Character.prototype.onKeyDown = function (event) {
-        console.log("key down " + this.upkey);
         switch (event.keyCode) {
             case this.upkey:
                 if (this.posY > 0) {
@@ -136,16 +146,11 @@ var Character = (function () {
                 break;
             case this.spacebar:
                 if (this.weaponTrue) {
-                    console.log("space clicked!");
-                    var b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    this.bulletArray.push(b);
-                    this.addBullet;
+                    this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    this.bulletArray.push(this.addBullet);
                 }
                 break;
         }
-    };
-    Character.prototype.bulletToCharacter = function (b) {
-        return b;
     };
     Character.prototype.onKeyUp = function (event) {
         switch (event.keyCode) {
@@ -195,9 +200,7 @@ var Character = (function () {
         }
     };
     Character.prototype.deleteCharacter = function () {
-        window.removeEventListener("keydown", this.keyDownFunction);
-        window.removeEventListener("keyup", this.keyUpFunction);
-        this.character.remove();
+        document.body.removeChild(this.character);
     };
     return Character;
 }());
@@ -284,10 +287,11 @@ var Startgame = (function () {
         this.startButton.addEventListener("click", this.createWorld.bind(this));
     }
     Startgame.prototype.createWorld = function () {
+        this.playerValue = this.nameTextField.value;
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(5, "level1");
+        new Level(1, "level1");
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
