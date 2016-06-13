@@ -23,6 +23,9 @@ class Character {
     private downSpeed: number = 0;
     private upSpeed: number = 0;
     
+    private keyDownFunction;
+    private keyUpFunction;
+    
     //startposition on screen
     private posX: number;
     private posY: number;
@@ -34,7 +37,7 @@ class Character {
     private bulletArray = [];
 
     constructor(left: number, right: number, up: number, down: number, posX: number, posY: number, weapon: boolean, spacebar: number) {
-
+        
         this.character = document.createElement("character");
         document.body.appendChild(this.character);
 
@@ -58,20 +61,19 @@ class Character {
         this.posX = posX;
         this.posY = posY;
 
+        this.keyDownFunction = this.onKeyDown.bind(this);
+        this.keyUpFunction = this.onKeyUp.bind(this);
+
         // keyboard listener
-        window.addEventListener("keydown", this.onKeyDown.bind(this));
-        window.addEventListener("keyup", this.onKeyUp.bind(this));
-
-        requestAnimationFrame(this.gameLoop.bind(this));
-    }
-
-    private gameLoop() {
-        this.move();
-        requestAnimationFrame(this.gameLoop.bind(this));
+        window.addEventListener("keydown", this.keyDownFunction);
+        window.addEventListener("keyup", this.keyUpFunction);
     }
 
     // keyboard input changes speed
     private onKeyDown(event: KeyboardEvent): void {
+        
+        console.log("key down " + this.upkey);
+        
         switch (event.keyCode) {
             case this.upkey:
                 if(this.posY > 0){
@@ -95,13 +97,22 @@ class Character {
                 }
                 this.lastKey = 0;
                 break;
-                case this.spacebar:
+             case this.spacebar:
                 if(this.weaponTrue){
-                    this.addBullet = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    this.bulletArray.push(this.addBullet);
+                    console.log("space clicked!");
+                    // this.game.addBullet();
+                    // this.addBullet;
+                    // dit in de level.ts
+                    let b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
+                    this.bulletArray.push(b);
+                    this.addBullet;                    
                 }
                 break;
         }
+    }
+    
+    public bulletToCharacter (b){
+        return b;
     }
 
     // speed to 0 when keyboard input is down
@@ -123,7 +134,7 @@ class Character {
                 break;
         }
     }
-    private move(): void {
+    public move(): void {
         
         this.posX = this.posX - this.leftSpeed + this.rightSpeed;
         this.posY = this.posY - this.upSpeed + this.downSpeed;
@@ -163,6 +174,10 @@ class Character {
     }
     
     public deleteCharacter(): void {
-        document.body.removeChild(this.character);
+        // listeners weg
+        window.removeEventListener("keydown", this.keyDownFunction);
+        window.removeEventListener("keyup", this.keyUpFunction);
+        // div weg
+        this.character.remove();
     }
 }
