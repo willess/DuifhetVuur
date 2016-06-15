@@ -1,5 +1,6 @@
 /// <reference path="player.ts"/>
 /// <reference path="howler.d.ts"/>
+/// <reference path="definitions/jquery.d.ts" />
 
 /**
  * Startgame
@@ -29,8 +30,12 @@ class Startgame {
     private highscore: HTMLElement;
     private highscoreView: any;
     private soundTrue: boolean = true;
+
+    // public xhttp: XMLHttpRequest;
     
 constructor(soundTrue: boolean) {
+
+    this.testjQuery();
     
     if(soundTrue == false){
         this.soundTrue = false;
@@ -102,7 +107,13 @@ constructor(soundTrue: boolean) {
     private createWorld() {
         this.playerValue = this.nameTextField.value;       
         // this.playerValue = this.nameTextField;
-        console.log(this.playerValue);
+        //console.log(this.playerValue);
+        $.post("include/names.php", { name: this.playerValue });
+
+        // this.xhttp.open("GET", "names.php", true);
+        // this.xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // this.xhttp.send('?name='+this.playerValue);
+
         this.startScreen.remove();
         this.startWrapper.remove();
         new Level(1, "level1");
@@ -124,5 +135,16 @@ constructor(soundTrue: boolean) {
         this.startLogo.remove();
         this.startWrapper.remove();
         new CreditRoll();
+    }
+
+    private testjQuery(){
+        console.log("start jquery testje");
+        
+        $.getJSON("js/test.json", (data) => this.finishedLoading(data));
+    }
+
+    private finishedLoading(data:any): void {
+        console.log("json has loaded with jquery hooray");
+        console.dir(data);
     }
 }

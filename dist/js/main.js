@@ -246,6 +246,7 @@ var Player = (function () {
 var Startgame = (function () {
     function Startgame(soundTrue) {
         this.soundTrue = true;
+        this.testjQuery();
         if (soundTrue == false) {
             this.soundTrue = false;
         }
@@ -294,7 +295,7 @@ var Startgame = (function () {
     }
     Startgame.prototype.createWorld = function () {
         this.playerValue = this.nameTextField.value;
-        console.log(this.playerValue);
+        $.post("include/names.php", { name: this.playerValue });
         this.startScreen.remove();
         this.startWrapper.remove();
         new Level(1, "level1");
@@ -313,6 +314,15 @@ var Startgame = (function () {
         this.startLogo.remove();
         this.startWrapper.remove();
         new CreditRoll();
+    };
+    Startgame.prototype.testjQuery = function () {
+        var _this = this;
+        console.log("start jquery testje");
+        $.getJSON("js/test.json", function (data) { return _this.finishedLoading(data); });
+    };
+    Startgame.prototype.finishedLoading = function (data) {
+        console.log("json has loaded with jquery hooray");
+        console.dir(data);
     };
     return Startgame;
 }());
@@ -557,6 +567,11 @@ var middleScreen = (function () {
         this.text.setAttribute("id", "next-text");
         this.text.innerHTML = "Het volgende level begint over " + this.count;
         document.body.appendChild(this.text);
+        this.skip = document.createElement('button');
+        this.skip.setAttribute("id", "skip-button");
+        this.skip.innerHTML = "Overslaan";
+        document.body.appendChild(this.skip);
+        this.skip.addEventListener("click", this.skipButton.bind(this));
         this.timer = setInterval(this.counter.bind(this), 1000);
     }
     middleScreen.prototype.counter = function () {
@@ -569,6 +584,12 @@ var middleScreen = (function () {
             document.body.removeChild(this.text);
         }
         this.text.innerHTML = "Het volgende level begint over " + this.count;
+    };
+    middleScreen.prototype.skipButton = function () {
+        document.body.removeChild(this.middle);
+        document.body.removeChild(this.text);
+        document.body.removeChild(this.skip);
+        clearInterval(this.timer);
     };
     return middleScreen;
 }());
