@@ -1,3 +1,7 @@
+<?php
+//require_once("include/db_connect.php");
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,7 +12,10 @@
 
   </head>
   <body>
+    <script src="js/jquery-3.0.0.min.js"></script>
     <script src='js/howler.min.js'></script>
     <script src='js/main.js'></script>
+    
+    
   </body>
 </html>

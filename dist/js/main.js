@@ -401,6 +401,7 @@ var Startgame = (function () {
     function Startgame(soundTrue) {
         this.soundTrue = true;
         this.time = 0;
+        this.testjQuery();
         if (soundTrue == false) {
             this.soundTrue = false;
         }
@@ -450,6 +451,7 @@ var Startgame = (function () {
     Startgame.prototype.createWorld = function () {
         this.playerValue = this.nameTextField.value;
         console.log(this.playerValue);
+        $.post("include/names.php", { name: this.playerValue });
         this.startScreen.remove();
         this.startWrapper.remove();
         this.player = new Player(this.playerValue);
@@ -468,6 +470,15 @@ var Startgame = (function () {
     Startgame.prototype.creditScreen = function () {
         this.startLogo.remove();
         this.startWrapper.remove();
+    };
+    Startgame.prototype.testjQuery = function () {
+        var _this = this;
+        console.log("start jquery testje");
+        $.getJSON("js/test.json", function (data) { return _this.finishedLoading(data); });
+    };
+    Startgame.prototype.finishedLoading = function (data) {
+        console.log("json has loaded with jquery hooray");
+        console.dir(data);
     };
     return Startgame;
 }());
@@ -616,6 +627,12 @@ var middleScreen = (function () {
             document.body.removeChild(this.text);
         }
         this.text.innerHTML = "Het volgende level begint over " + this.count;
+    };
+    middleScreen.prototype.skipButton = function () {
+        document.body.removeChild(this.middle);
+        document.body.removeChild(this.text);
+        document.body.removeChild(this.skip);
+        clearInterval(this.timer);
     };
     return middleScreen;
 }());

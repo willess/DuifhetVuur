@@ -1,0 +1,34 @@
+{
+    "questions": [
+        {
+            "text": "Is dit een voorbeeldvraag?",
+            "answers": [
+                "ja",
+                "nee",
+                "misschien",
+                "geen van allen"
+            ],
+            "correct": 1
+        },
+        {
+            "text": "Is dit een voorbeeldvraag?",
+            "answers": [
+                "ja",
+                "nee",
+                "misschien",
+                "geen van allen"
+            ],
+            "correct": 1
+        },
+        {
+            "text": "Is dit een voorbeeldvraag?",
+            "answers": [
+                "ja",
+                "nee",
+                "misschien",
+                "geen van allen"
+            ],
+            "correct": 1
+        }
+    ]
+}
