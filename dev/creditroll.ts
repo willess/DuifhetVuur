@@ -8,10 +8,12 @@ class CreditRoll {
     private count: number = 0;
     private i:number;
     private timer:number;
+    private time: number;
 
     // test
     
-    constructor() {
+    constructor(time: number) {
+        this.time = time;
         console.log("finalscreen");
         this.credit = document.createElement("creditscreen");
         this.credit.setAttribute("id", "credits");
@@ -36,7 +38,7 @@ class CreditRoll {
                 clearInterval(this.timer);
                 document.body.removeChild(this.credit);
                 document.body.removeChild(this.wrapper);
-                new EndScreen();
+                new EndScreen(this.time);
         }
     }
     

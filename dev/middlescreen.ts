@@ -6,21 +6,21 @@ class middleScreen {
     private middle: HTMLElement;
     private text: HTMLElement;
     public level: string;
-    public count: number = 10;
+    public count: number = 5;
     private timer: number;
 
-
-    constructor(level: string) {
+    constructor(level: number, time: number) {
 
         this.middle = document.createElement("middlescreen");
         this.middle.setAttribute("id", "middle-screen");
-        this.middle.innerHTML = "" + level + " uitgespeeld!" + "<br />" + "Je score is score";
+        this.middle.innerHTML = "Level " + level + " uitgespeeld!" + "<br />" + "Je tussentijd is: " + time + " seconden!";
         document.body.appendChild(this.middle);
 
         this.text = document.createElement("nexttext");
         this.text.setAttribute("id", "next-text");
         this.text.innerHTML = "Het volgende level begint over " + this.count;
         document.body.appendChild(this.text);
+
 
         this.timer = setInterval(this.counter.bind(this), 1000);
 

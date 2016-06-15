@@ -10,7 +10,7 @@ class Fire {
     
     private enemyDown: boolean = false;
     
-    private hitPoints: number = 100;
+    private hitPoints: number = 1000;
     
     constructor() {
        this.div = document.createElement("fire");
@@ -24,8 +24,8 @@ class Fire {
             return Math.floor(Math.random()  * (max-  min)) + min;
         }
         
-        this.posX = randomX(200, window.innerWidth - 40);
-        this.posY = randomY(50, window.innerHeight - 50);
+        this.posX = randomX(200, window.innerWidth - 140);
+        this.posY = randomY(50, window.innerHeight - 150);
         
         this.setLocation(this.posX, this.posY);
     }
@@ -43,7 +43,11 @@ class Fire {
             //Als character raakt lucifer dan ...
 
             if (this.enemyDown == false) {
+                this.hitPoints -= 10;
+                // pad.deleteBullet();
+                if(this.hitPoints == 0){
                 this.div.remove();
+                delete this;
 
                 this.enemyDown = true;
                 var sound = new Howl({
@@ -54,9 +58,20 @@ class Fire {
             });
            
         sound.play('intro');
+            
                 return true;
+                }
             }
             return false;
         }
     }
+    
+    //check character when fire is hitted
+    public checkCharacterCollision (pad: Character, player: Player) {
+        if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
+            console.log("character hitted by fire!!!!");
+            player.characterHitted();
+        }   
+    }
+
 }

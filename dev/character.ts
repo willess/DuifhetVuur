@@ -43,7 +43,6 @@ class Character {
         this.weaponTrue = weapon;
         
         if(weapon) {
-            console.log("wapen added!");
             this.weapon = document.createElement("waterGun");
             this.character.appendChild(this.weapon);
         }
@@ -70,9 +69,7 @@ class Character {
 
     // keyboard input changes speed
     private onKeyDown(event: KeyboardEvent): void {
-        
-        console.log("key down " + this.upkey);
-        
+                
         switch (event.keyCode) {
             case this.upkey:
                 if(this.posY > 0){
@@ -185,4 +182,5 @@ class Character {
         // div weg
         this.character.remove();
     }
+
 }

@@ -11,12 +11,14 @@ class EndScreen {
     private playAgain:HTMLElement;
     private endGame:HTMLElement;
     private highScore:HTMLElement;
+    private time: number;
     
-    constructor() {        
+    constructor(time: number) {   
+        this.time = time;     
         //background
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
-        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je score is score";
+        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je tijd is: " + this.time + " seconden!";
         document.body.appendChild(this.background);
         
         //play again button

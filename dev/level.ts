@@ -1,4 +1,6 @@
 /// reference path="newLevel.ts"/>
+/// reference path="player.ts"/>
+
 class Level {
 
     private enemyAmount: number;
@@ -23,8 +25,21 @@ class Level {
     private weapon: boolean;
 
     public level: middleScreen;
+    private time: number;
 
-    constructor(levelNumber: number, toUseBackground: string) {
+    private timeCounter: number;
+
+    public player: Player;
+
+    constructor(levelNumber: number, toUseBackground: string, time: number, player: Player) {
+
+        this.player = player;
+
+        this.time = time;
+        console.log(this.time);
+
+        this.timeCounter = setInterval(this.timer.bind(this), 1000);   
+
 
         switch (levelNumber) {
             case 1:
@@ -66,16 +81,16 @@ class Level {
         this.levelElement = document.createElement(toUseBackground);
         document.body.appendChild(this.levelElement);
 
-        this.playerTwo = new Character(65, 68, 87, 83, 0, 150, this.weapon, 32);
-        this.playerOne = new Character(37, 39, 38, 40, 0, 250, this.weapon, 13);
+        // this.playerTwo = new Character(65, 68, 87, 83, 0, 150, this.weapon, 13);
+        this.playerOne = new Character(37, 39, 38, 40, 0, 250, this.weapon, 32);
 
 
         this.levelNumber = levelNumber;
         if (Level.killCounter == null) {
-            Level.killCounter = new EnemiesKilled(this.matches);
+            Level.killCounter = new EnemiesKilled(this.matches + this.fires);
         } else {
             Level.killCounter.deathCount = 0;
-            Level.killCounter.toKillEnemies = this.matches;
+            Level.killCounter.toKillEnemies = this.matches + this.fires;
         }
 
         for (var i = 0; i < this.matches; i++) {
@@ -91,30 +106,38 @@ class Level {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
-    private gameLoop() {
+    public timer() {
+        this.time++;
+        // console.log(this.time);
+        return this.time;
+    }
 
+    private gameLoop() {
         // console.log(this.playerTwo.bulletArray);
 
         for (var i = 0; i < this.fireArray.length; i++) {
             
-            for (var key of this.playerTwo.bulletArray) {
+            for (var key of this.playerOne.bulletArray) {
                     
                     if(this.fireArray[i].checkFireCollision(key)) {
+                        Level.killCounter.updateScores();
                         console.log("hpdddddd");
-
                     }
-
                 }
             }
         
-        this.playerTwo.move();
+        // this.playerTwo.move();
         this.playerOne.move();
 
         //loop trough the matchArray and check collision
         for (var i = 0; i < this.matchArray.length; i++) {
-            if (this.matchArray[i].checkCollision(this.playerTwo) || this.matchArray[i].checkCollision(this.playerOne)) {
+            if (this.matchArray[i].checkCollision(this.playerOne)) {
                 Level.killCounter.updateScores();
             }
+        }
+        //check if character hits an fire
+        for (var i = 0; i < this.fireArray.length; i++) {
+            this.fireArray[i].checkCharacterCollision(this.playerOne, this.player) 
         }
 
         // loop door de bullet array
@@ -134,37 +157,42 @@ class Level {
             c.deleteFire();
         }
 
+
+
         this.playerOne.deleteCharacter();
-        this.playerTwo.deleteCharacter();
+        // this.playerTwo.deleteCharacter();
         this.playerOne = null;
-        this.playerTwo = null;
+        // this.playerTwo = null;
         this.matchArray = null;
         this.fireArray = null;
         this.levelElement = null;
         this.levelNumber++;
+        clearInterval(this.timeCounter);
 
         if(this.levelNumber == 2){
-            new middleScreen("Level 1");
+            new middleScreen(this.levelNumber -1, this.time);
         }
 
         if(this.levelNumber == 3){
-            new middleScreen("Level 2");
+            new middleScreen(this.levelNumber -1, this.time);
         }
 
         if(this.levelNumber == 4){
-            new middleScreen("Level 3");
+            new middleScreen(this.levelNumber -1, this.time);
         }
 
         if(this.levelNumber == 5){
-            new middleScreen("Level 4");
+            new middleScreen(this.levelNumber -1, this.time);
         }
 
         if(this.levelNumber > 5) {
-            new CreditRoll();
+            new CreditRoll(this.time);
         }
         else{
-        new Level(this.levelNumber, "level1");
+        new Level(this.levelNumber, "level1", this.time, this.player);
+
         }
+
     }
 
 }

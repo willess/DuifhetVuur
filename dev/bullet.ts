@@ -62,39 +62,20 @@ class Bullet {
             this.bullet.remove();
             this.bullet = null;
             // maar hele bullet instance moet ook nog weg
-            // ???
         }
     }
 
-    //     public checkFireCollision(pad: Fire): boolean {
-    //     if (this.posX <= pad.getFireX() + 80 && this.posX >= pad.getFireX() - 80 && this.posY <= pad.getFireY() + 50 && this.posY >= pad.getFireY() - 10) {
-    //         //Als character raakt lucifer dan ...
-
-
-    //         if (this.enemyDown == false) {
-    //             console.log("hahahahahaha");
-    //             this.bullet.remove();
-                
-    //             this.enemyDown = true;
-    //             var sound = new Howl({
-    //                 urls: ["sound/step.wav"],
-    //                 sprite: {
-    //                 intro: [0, 150000],
-    //             }
-    //         });
-           
-    //     sound.play('intro');
-    //             return true;
-    //         }
-    //         return false;
-    //     }
-    // }
-
-            public getFireX(): number {
-        return this.posX;
+        public getFireX(): number {
+            return this.posX;
     }
 
         public getFireY(): number {
-        return this.posY;
+            return this.posY;
+    }
+
+        public deleteBullet() {
+            console.log("hitted!");
+            this.bullet.remove();
+            delete this.bullet;
     }
 }

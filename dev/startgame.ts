@@ -17,7 +17,7 @@ class Startgame {
     private startScreen: HTMLElement;
     private startLogo: HTMLElement;
     public nameTextField: HTMLInputElement;
-    public playerValue: String;
+    public playerValue: string;
 
     private scoreScreen: HTMLElement;
     private backButton: HTMLElement;
@@ -29,6 +29,10 @@ class Startgame {
     private highscore: HTMLElement;
     private highscoreView: any;
     private soundTrue: boolean = true;
+
+    private timeCounter: number;
+    private time: number = 0;
+    private player1: Player;
     
 constructor(soundTrue: boolean) {
     
@@ -38,7 +42,7 @@ constructor(soundTrue: boolean) {
     
     if(this.soundTrue){
             var sound = new Howl({
-                //urls: ["sound/intro/gameMusic1.mp3"],
+                // urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -101,13 +105,15 @@ constructor(soundTrue: boolean) {
 
     private createWorld() {
         this.playerValue = this.nameTextField.value;       
-        // this.playerValue = this.nameTextField;
         console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
-        new Level(1, "level1");
+        this.player = new Player(this.playerValue);
+        // this.player1 = new Player();
+        // this.time = setInterval(this.timer.bind(this), 1000);   
+        new Level(2, "level1", 0, this.player);
     }
-    
+
     private highscoreScreen(){
         this.startLogo.remove();
         this.startScreen.remove();
@@ -123,6 +129,6 @@ constructor(soundTrue: boolean) {
     private creditScreen() {
         this.startLogo.remove();
         this.startWrapper.remove();
-        new CreditRoll();
+        // new CreditRoll();
     }
 }
