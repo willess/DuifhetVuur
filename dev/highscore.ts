@@ -12,8 +12,11 @@ class highscore{
     private playerScore: HTMLElement;
     private score: HTMLElement;
     private Startgame: any;
+
+    private reload: boolean;
     
-    constructor(){
+    constructor(reload: boolean){
+        this.reload = reload;
         
         //Highscore wrapper
         this.scoreScreen = document.createElement("wrapper");
@@ -43,6 +46,6 @@ class highscore{
     private showStartScreen(){
         var soundTrue = false;
         this.scoreScreen.remove();
-        this.Startgame = new Startgame(soundTrue);
+        this.Startgame = new Startgame(soundTrue, this.reload);
     }
 }

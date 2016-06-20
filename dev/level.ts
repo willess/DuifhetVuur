@@ -32,48 +32,51 @@ class Level {
     public player: Player;
     private playerName: string;
 
+    private spark: boolean;
 
     constructor(levelNumber: number, toUseBackground: string, time: number, player: Player) {
+
         this.playerName = player.name;
         this.player = player;
 
         this.time = time;
-        console.log(this.time);
 
         this.timeCounter = setInterval(this.timer.bind(this), 1000);   
 
 
         switch (levelNumber) {
             case 1:
-                console.log("Level 1");
+                //level 1
                 this.matches = 5;
                 this.fires = 0;
                 this.weapon = false;
                 break;
             case 2:
-                console.log("level 2!");
+                //level 2
                 this.matches = 20;
                 this.fires = 4;
                 this.weapon = true;
                 break;
             case 3:
-                console.log("level 3!");
+                //level 3
                 this.matches = 10;
                 this.fires = 8;
                 this.weapon = true;
+                this.spark = true;
                 break;
             case 4:
-                console.log("level 4!");
+                //level 4
                 this.matches = 10;
                 this.fires = 10;
                 this.weapon = true;
-
+                this.spark = true;
                 break;
             case 5:
-                console.log("level 5!");
+                //level 5
                 this.matches = 1;
                 this.fires = 1;
                 this.weapon = true;
+                this.spark = true;
                 break;
 
             default:
@@ -101,7 +104,7 @@ class Level {
         }
 
         for (var i = 0; i < this.fires; i++) {
-            this.fire = new Fire();
+            this.fire = new Fire(this.spark);
             this.fireArray.push(this.fire);
         }
 
@@ -119,11 +122,12 @@ class Level {
 
         for (var i = 0; i < this.fireArray.length; i++) {
             
+            this.fireArray[i].moveSpark(this.playerOne, this.player);
+            
             for (var key of this.playerOne.bulletArray) {
                     
                     if(this.fireArray[i].checkFireCollision(key)) {
                         Level.killCounter.updateScores();
-                        console.log("hpdddddd");
                     }
                 }
             }
@@ -139,7 +143,9 @@ class Level {
         }
         //check if character hits an fire
         for (var i = 0; i < this.fireArray.length; i++) {
-            this.fireArray[i].checkCharacterCollision(this.playerOne, this.player) 
+            if(this.fireArray[i].enemyDown == false){
+            this.fireArray[i].checkCharacterCollision(this.playerOne, this.player, this) 
+            }
         }
 
         // loop door de bullet array
@@ -158,9 +164,7 @@ class Level {
         for (var c of this.fireArray) {
             c.deleteFire();
         }
-
-
-
+        this.levelElement.remove();
         this.playerOne.deleteCharacter();
         // this.playerTwo.deleteCharacter();
         this.playerOne = null;
@@ -188,13 +192,32 @@ class Level {
         }
 
         if(this.levelNumber > 5) {
+            Level.killCounter.div.remove();
             new CreditRoll(this.time, this.playerName);
         }
         else{
-        new Level(this.levelNumber, "level1", this.time, this.player);
-
+            new Level(this.levelNumber, "level1", this.time, this.player);
         }
 
+    }
+
+    public deleteAll() {
+        for (var c of this.matchArray) {
+            c.deleteMatch();
+        }
+        for (var c of this.fireArray) {
+            c.deleteFire();
+        }
+
+        this.playerOne.deleteCharacter();
+        // this.playerTwo.deleteCharacter();
+        this.playerOne = null;
+        // this.playerTwo = null;
+        this.matchArray = null;
+        this.fireArray = null;
+        this.levelElement = null;
+        this.levelNumber++;
+        clearInterval(this.timeCounter);
     }
 
 }

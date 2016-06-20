@@ -11,7 +11,7 @@ class Player {
 
     public time: number;
     public hitpoints: number = 2000;
-    public currentHP: number = 2000;
+    public startHp: number = 2000;
 
     private healthbar: HTMLElement;
     private playerName: string;
@@ -21,7 +21,7 @@ class Player {
         this.playerName = name;
 
         this.healthbar = document.createElement("healthbar");
-        this.healthbar.innerHTML = "HP: " + this.currentHP + "/" + this.hitpoints;
+        this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
         document.body.appendChild(this.healthbar);
 
         this.name = name;
@@ -34,17 +34,19 @@ class Player {
         return this.time;
     }
 
-    public characterHitted(){
-        this.hitpoints = this.hitpoints - 10;
+    public characterHitted(hp: number){
+        this.hitpoints = this.hitpoints - hp;
         this.showHP(this.hitpoints);
     }
 
     public showHP(hp: number) {
-        this.currentHP = hp;
-        console.log(this.currentHP);
-        if(this.currentHP <= 0){
-            console.log("Game Over!");
-        }
+        this.hitpoints = hp;
+        this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
+
+    }
+
+    public showGameOverScreen() {
+        console.log("Game Over!!");
     }
 
 }

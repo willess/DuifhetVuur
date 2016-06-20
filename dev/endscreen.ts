@@ -13,18 +13,21 @@ class EndScreen {
     private highScore:HTMLElement;
     private time: number;
     private playerName:string;
+    private reload: boolean;
+
     
-    constructor(time: number, name: string) {   
+    constructor(time: number, name: string) {  
+        this.reload = true; 
         this.time = time;
         this.playerName = name;
-        console.log(this.time);
 
         this.addToDB();
-             
+
+        this.time = time;     
         //background
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
-        this.background.innerHTML = "Bedankt voor het spelen " + this.playerName + "<br />" + "Je tijd is: " + this.time + " seconden!";
+        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je tijd is: " + this.time + " seconden! <br /> Kijk op welke plaats je staat in de highscore lijst!";
         document.body.appendChild(this.background);
         
         //play again button
@@ -34,20 +37,12 @@ class EndScreen {
         this.background.appendChild(this.playAgain);
         this.playAgain.addEventListener("click", this.again.bind(this));
         
-        //end game button
-        this.endGame = document.createElement("button");
-        this.endGame.setAttribute("id", "againbutton");
-        this.endGame.innerHTML = "Spel stoppen";
-        this.endGame.style.marginTop = "350px";
-        this.background.appendChild(this.endGame);
-        this.endGame.addEventListener("click", this.exit.bind(this));
-        
         //highscore
         this.highScore = document.createElement("button");
         this.highScore.setAttribute("id", "againbutton");
         this.highScore.innerHTML = "Highscore";
         this.background.appendChild(this.highScore);
-        this.highScore.style.marginTop = "495px";
+        this.highScore.style.marginTop = "345px";
         this.highScore.addEventListener("click", this.score.bind(this));
     }
     
@@ -64,17 +59,17 @@ class EndScreen {
     private again(){
         console.log("again");
         document.body.removeChild(this.background);
-        new Startgame(true);
+        new Startgame(true, this.reload);
     }
     
     private score() {
         console.log("score");
         window.open("include/highscore.php", '_parent');
-        //new highscore();
     }
 
     private addToDB(){
         $.post("include/names.php", { score: this.time, name: this.playerName});
+        new highscore(this.reload);
     }
     
 }

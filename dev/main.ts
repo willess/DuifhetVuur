@@ -2,5 +2,7 @@
 
 // hier starten we de applicatie
 window.addEventListener("load", function() {
-    new Startgame(true);
+
+    let reload: boolean = false;
+    new Startgame(true, reload);
 });

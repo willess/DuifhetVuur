@@ -147,7 +147,6 @@ var Character = (function () {
             case this.spacebar:
                 if (this.weaponTrue) {
                     this.addBullet();
-                    console.log("space clicked!");
                 }
                 break;
         }
@@ -211,6 +210,7 @@ var Character = (function () {
         window.removeEventListener("keydown", this.keyDownFunction);
         window.removeEventListener("keyup", this.keyUpFunction);
         this.character.remove();
+        this.character = null;
     };
     return Character;
 }());
@@ -219,7 +219,6 @@ var CreditRoll = (function () {
         this.count = 0;
         this.playerName = name;
         this.time = time;
-        console.log("finalscreen");
         this.credit = document.createElement("creditscreen");
         this.credit.setAttribute("id", "credits");
         document.body.appendChild(this.credit);
@@ -233,7 +232,6 @@ var CreditRoll = (function () {
     }
     CreditRoll.prototype.counter = function () {
         this.count++;
-        console.log(this.count);
         if (this.count == 5) {
             clearInterval(this.timer);
             document.body.removeChild(this.credit);
@@ -250,38 +248,35 @@ var Level = (function () {
         this.playerName = player.name;
         this.player = player;
         this.time = time;
-        console.log(this.time);
         this.timeCounter = setInterval(this.timer.bind(this), 1000);
         switch (levelNumber) {
             case 1:
-                console.log("Level 1");
                 this.matches = 5;
                 this.fires = 0;
                 this.weapon = false;
                 break;
             case 2:
-                console.log("level 2!");
                 this.matches = 20;
                 this.fires = 4;
                 this.weapon = true;
                 break;
             case 3:
-                console.log("level 3!");
                 this.matches = 10;
                 this.fires = 8;
                 this.weapon = true;
+                this.spark = true;
                 break;
             case 4:
-                console.log("level 4!");
                 this.matches = 10;
                 this.fires = 10;
                 this.weapon = true;
+                this.spark = true;
                 break;
             case 5:
-                console.log("level 5!");
                 this.matches = 1;
                 this.fires = 1;
                 this.weapon = true;
+                this.spark = true;
                 break;
             default:
                 break;
@@ -302,7 +297,7 @@ var Level = (function () {
             this.matchArray.push(this.match);
         }
         for (var i = 0; i < this.fires; i++) {
-            this.fire = new Fire();
+            this.fire = new Fire(this.spark);
             this.fireArray.push(this.fire);
         }
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -313,11 +308,11 @@ var Level = (function () {
     };
     Level.prototype.gameLoop = function () {
         for (var i = 0; i < this.fireArray.length; i++) {
+            this.fireArray[i].moveSpark(this.playerOne, this.player);
             for (var _i = 0, _a = this.playerOne.bulletArray; _i < _a.length; _i++) {
                 var key = _a[_i];
                 if (this.fireArray[i].checkFireCollision(key)) {
                     Level.killCounter.updateScores();
-                    console.log("hpdddddd");
                 }
             }
         }
@@ -328,7 +323,9 @@ var Level = (function () {
             }
         }
         for (var i = 0; i < this.fireArray.length; i++) {
-            this.fireArray[i].checkCharacterCollision(this.playerOne, this.player);
+            if (this.fireArray[i].enemyDown == false) {
+                this.fireArray[i].checkCharacterCollision(this.playerOne, this.player, this);
+            }
         }
         if (Level.killCounter.isLevelComplete()) {
             this.endLevel();
@@ -344,6 +341,7 @@ var Level = (function () {
             var c = _c[_b];
             c.deleteFire();
         }
+        this.levelElement.remove();
         this.playerOne.deleteCharacter();
         this.playerOne = null;
         this.matchArray = null;
@@ -364,21 +362,39 @@ var Level = (function () {
             new middleScreen(this.levelNumber - 1, this.time);
         }
         if (this.levelNumber > 5) {
+            Level.killCounter.div.remove();
             new CreditRoll(this.time, this.playerName);
         }
         else {
             new Level(this.levelNumber, "level1", this.time, this.player);
         }
     };
+    Level.prototype.deleteAll = function () {
+        for (var _i = 0, _a = this.matchArray; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.deleteMatch();
+        }
+        for (var _b = 0, _c = this.fireArray; _b < _c.length; _b++) {
+            var c = _c[_b];
+            c.deleteFire();
+        }
+        this.playerOne.deleteCharacter();
+        this.playerOne = null;
+        this.matchArray = null;
+        this.fireArray = null;
+        this.levelElement = null;
+        this.levelNumber++;
+        clearInterval(this.timeCounter);
+    };
     return Level;
 }());
 var Player = (function () {
     function Player(name) {
         this.hitpoints = 2000;
-        this.currentHP = 2000;
+        this.startHp = 2000;
         this.playerName = name;
         this.healthbar = document.createElement("healthbar");
-        this.healthbar.innerHTML = "HP: " + this.currentHP + "/" + this.hitpoints;
+        this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
         document.body.appendChild(this.healthbar);
         this.name = name;
         this.time = setInterval(this.timer.bind(this), 1000);
@@ -387,29 +403,34 @@ var Player = (function () {
         this.time++;
         return this.time;
     };
-    Player.prototype.characterHitted = function () {
-        this.hitpoints = this.hitpoints - 10;
+    Player.prototype.characterHitted = function (hp) {
+        this.hitpoints = this.hitpoints - hp;
         this.showHP(this.hitpoints);
     };
     Player.prototype.showHP = function (hp) {
-        this.currentHP = hp;
-        console.log(this.currentHP);
-        if (this.currentHP <= 0) {
-            console.log("Game Over!");
-        }
+        this.hitpoints = hp;
+        this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
+    };
+    Player.prototype.showGameOverScreen = function () {
+        console.log("Game Over!!");
     };
     return Player;
 }());
 var Startgame = (function () {
-    function Startgame(soundTrue) {
+    function Startgame(soundTrue, reload) {
         this.soundTrue = true;
         this.time = 0;
+        this.reload = reload;
+        if (this.reload) {
+            location.reload();
+        }
         this.testjQuery();
         if (soundTrue == false) {
             this.soundTrue = false;
         }
         if (this.soundTrue) {
             var sound = new Howl({
+                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -453,7 +474,6 @@ var Startgame = (function () {
     }
     Startgame.prototype.createWorld = function () {
         this.playerValue = this.nameTextField.value;
-        console.log(this.playerValue);
         this.startScreen.remove();
         this.startWrapper.remove();
         this.player = new Player(this.playerValue);
@@ -463,7 +483,7 @@ var Startgame = (function () {
         this.startLogo.remove();
         this.startScreen.remove();
         this.startWrapper.remove();
-        this.highscoreView = new highscore();
+        this.highscoreView = new highscore(this.reload);
     };
     Startgame.prototype.HowToPlayScreen = function () {
         this.startLogo.remove();
@@ -475,41 +495,33 @@ var Startgame = (function () {
     };
     Startgame.prototype.testjQuery = function () {
         var _this = this;
-        console.log("start jquery testje");
         $.getJSON("js/test.json", function (data) { return _this.finishedLoading(data); });
     };
     Startgame.prototype.finishedLoading = function (data) {
-        console.log("json has loaded with jquery hooray");
-        console.dir(data);
     };
     return Startgame;
 }());
 var EndScreen = (function () {
     function EndScreen(time, name) {
+        this.reload = true;
         this.time = time;
         this.playerName = name;
-        console.log(this.time);
         this.addToDB();
+        this.time = time;
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
-        this.background.innerHTML = "Bedankt voor het spelen " + this.playerName + "<br />" + "Je tijd is: " + this.time + " seconden!";
+        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je tijd is: " + this.time + " seconden! <br /> Kijk op welke plaats je staat in de highscore lijst!";
         document.body.appendChild(this.background);
         this.playAgain = document.createElement("button");
         this.playAgain.setAttribute("id", "againbutton");
         this.playAgain.innerHTML = "Opnieuw spelen?";
         this.background.appendChild(this.playAgain);
         this.playAgain.addEventListener("click", this.again.bind(this));
-        this.endGame = document.createElement("button");
-        this.endGame.setAttribute("id", "againbutton");
-        this.endGame.innerHTML = "Spel stoppen";
-        this.endGame.style.marginTop = "350px";
-        this.background.appendChild(this.endGame);
-        this.endGame.addEventListener("click", this.exit.bind(this));
         this.highScore = document.createElement("button");
         this.highScore.setAttribute("id", "againbutton");
         this.highScore.innerHTML = "Highscore";
         this.background.appendChild(this.highScore);
-        this.highScore.style.marginTop = "495px";
+        this.highScore.style.marginTop = "345px";
         this.highScore.addEventListener("click", this.score.bind(this));
     }
     EndScreen.prototype.exit = function () {
@@ -523,7 +535,7 @@ var EndScreen = (function () {
     EndScreen.prototype.again = function () {
         console.log("again");
         document.body.removeChild(this.background);
-        new Startgame(true);
+        new Startgame(true, this.reload);
     };
     EndScreen.prototype.score = function () {
         console.log("score");
@@ -531,13 +543,16 @@ var EndScreen = (function () {
     };
     EndScreen.prototype.addToDB = function () {
         $.post("include/names.php", { score: this.time, name: this.playerName });
+        new highscore(this.reload);
     };
     return EndScreen;
 }());
 var Fire = (function () {
-    function Fire() {
+    function Fire(spark) {
+        var _this = this;
         this.enemyDown = false;
         this.hitPoints = 1000;
+        this.sparkArray = [];
         this.div = document.createElement("fire");
         document.body.appendChild(this.div);
         function randomX(min, max) {
@@ -549,18 +564,30 @@ var Fire = (function () {
         this.posX = randomX(200, window.innerWidth - 140);
         this.posY = randomY(50, window.innerHeight - 150);
         this.setLocation(this.posX, this.posY);
+        if (spark) {
+            var a = setInterval(function () {
+                if (_this.enemyDown == false) {
+                    _this.spark = new Spark(_this.posX, _this.posY);
+                    _this.sparkArray.push(_this.spark);
+                }
+                else {
+                    clearInterval(a);
+                }
+            }, 3000);
+        }
     }
     Fire.prototype.setLocation = function (x, y) {
         this.div.style.transform = "translate(" + x + "px, " + y + "px";
     };
     Fire.prototype.deleteFire = function () {
+        document.body.removeChild(this.div);
     };
     Fire.prototype.checkFireCollision = function (pad) {
         if (this.posX <= pad.getFireX() + 80 && this.posX >= pad.getFireX() - 80 && this.posY <= pad.getFireY() + 50 && this.posY >= pad.getFireY() - 10) {
             if (this.enemyDown == false) {
                 this.hitPoints -= 10;
                 if (this.hitPoints == 0) {
-                    this.div.remove();
+                    this.div.classList.add("fireDead");
                     delete this;
                     this.enemyDown = true;
                     var sound = new Howl({
@@ -576,16 +603,28 @@ var Fire = (function () {
             return false;
         }
     };
-    Fire.prototype.checkCharacterCollision = function (pad, player) {
+    Fire.prototype.checkCharacterCollision = function (pad, player, level) {
         if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
-            console.log("character hitted by fire!!!!");
-            player.characterHitted();
+            if (player.hitpoints > 0) {
+                player.characterHitted(10);
+            }
+            else {
+                level.deleteAll();
+                player.showGameOverScreen();
+            }
+        }
+    };
+    Fire.prototype.moveSpark = function (character, player) {
+        for (var _i = 0, _a = this.sparkArray; _i < _a.length; _i++) {
+            var key = _a[_i];
+            key.move(character, player);
         }
     };
     return Fire;
 }());
 var highscore = (function () {
-    function highscore() {
+    function highscore(reload) {
+        this.reload = reload;
         this.scoreScreen = document.createElement("wrapper");
         this.scoreScreen.setAttribute("id", "screenScore");
         document.body.appendChild(this.scoreScreen);
@@ -605,12 +644,13 @@ var highscore = (function () {
     highscore.prototype.showStartScreen = function () {
         var soundTrue = false;
         this.scoreScreen.remove();
-        this.Startgame = new Startgame(soundTrue);
+        this.Startgame = new Startgame(soundTrue, this.reload);
     };
     return highscore;
 }());
 window.addEventListener("load", function () {
-    new Startgame(true);
+    var reload = false;
+    new Startgame(true, reload);
 });
 var middleScreen = (function () {
     function middleScreen(level, time) {
@@ -623,6 +663,11 @@ var middleScreen = (function () {
         this.text.setAttribute("id", "next-text");
         this.text.innerHTML = "Het volgende level begint over " + this.count;
         document.body.appendChild(this.text);
+        this.skip = document.createElement('button');
+        this.skip.setAttribute("id", "skip-button");
+        this.skip.innerHTML = "Overslaan";
+        document.body.appendChild(this.skip);
+        this.skip.addEventListener("click", this.skipButton.bind(this));
         this.timer = setInterval(this.counter.bind(this), 1000);
     }
     middleScreen.prototype.counter = function () {
@@ -633,6 +678,7 @@ var middleScreen = (function () {
             clearInterval(this.timer);
             document.body.removeChild(this.middle);
             document.body.removeChild(this.text);
+            document.body.removeChild(this.skip);
         }
         this.text.innerHTML = "Het volgende level begint over " + this.count;
     };
@@ -677,24 +723,50 @@ var EnemiesKilled = (function () {
         this.totalScore = 0;
         this.div = document.getElementsByTagName("ui")[0];
         this.toKillEnemies = toKillEnemies;
-        console.log("Game start!");
         this.div = document.createElement("score");
         document.body.appendChild(this.div);
         this.div.innerHTML = "Vuren gedoofd: " + this.deathCount + "/" + this.toKillEnemies;
     }
     EnemiesKilled.prototype.updateScores = function () {
         this.deathCount++;
-        this.div.innerHTML = "Vuren gedoofd:    " + this.deathCount + "/" + this.toKillEnemies;
+        this.div.innerHTML = "Vuren gedoofd: " + this.deathCount + "/" + this.toKillEnemies;
         this.totalScore = this.totalScore + 1;
         this.isLevelComplete();
     };
     EnemiesKilled.prototype.isLevelComplete = function () {
         if (this.deathCount == this.toKillEnemies) {
-            console.log("Je hebt het level gehaald!");
+            this.div.innerHTML = "Vuren gedoofd: 0/" + this.toKillEnemies;
             return true;
         }
         return false;
     };
     return EnemiesKilled;
+}());
+var Spark = (function () {
+    function Spark(posX, posY) {
+        this.posX = posX;
+        this.posY = posY;
+        this.div = document.createElement("spark");
+        document.body.appendChild(this.div);
+        this.speedX = Math.ceil(Math.random() * 5);
+        this.speedY = Math.ceil(Math.random() * 5);
+    }
+    Spark.prototype.move = function (character, player) {
+        this.posX += this.speedX;
+        this.posY += this.speedY;
+        if (this.posX > window.innerWidth || this.posX < 0) {
+            this.div.remove();
+        }
+        if (this.posY > window.innerHeight || this.posY < 0) {
+            this.div.remove();
+        }
+        this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
+        if (this.posX <= character.getX() + 80 && this.posX >= character.getX() - 80 && this.posY <= character.getY() + 150 && this.posY >= character.getY() - 10) {
+            this.div.remove();
+            player.characterHitted(1);
+            console.log("spark hit character!!");
+        }
+    };
+    return Spark;
 }());
 //# sourceMappingURL=main.js.map

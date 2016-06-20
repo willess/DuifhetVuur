@@ -96,12 +96,6 @@ class Character {
              case this.spacebar:
                 if(this.weaponTrue){
                     this.addBullet();
-                    console.log("space clicked!");
-                    // this.game.addBullet();
-                    // this.addBullet;
-                    // dit in de level.ts
-                    // let b = new Bullet(this.posX, this.posY, this.lastKey, this.weapon);
-                    // this.bulletArray.push(b);
                 }
                 break;
         }
@@ -181,6 +175,7 @@ class Character {
         window.removeEventListener("keyup", this.keyUpFunction);
         // div weg
         this.character.remove();
+        this.character = null;
     }
 
 }

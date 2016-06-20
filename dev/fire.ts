@@ -8,11 +8,14 @@ class Fire {
     private posX: number;
     private posY: number;
     
-    private enemyDown: boolean = false;
+    public enemyDown: boolean = false;
     
     private hitPoints: number = 1000;
     
-    constructor() {
+    private spark: Spark;
+    public sparkArray = [];
+
+    constructor(spark: boolean) {
        this.div = document.createElement("fire");
        document.body.appendChild(this.div);
                
@@ -28,6 +31,20 @@ class Fire {
         this.posY = randomY(50, window.innerHeight - 150);
         
         this.setLocation(this.posX, this.posY);
+
+        if(spark) {
+            var a = setInterval(() => {
+                if(this.enemyDown == false){
+                    this.spark = new Spark(this.posX, this.posY);
+                    this.sparkArray.push(this.spark);
+                }
+                else {
+                    clearInterval(a);
+                }
+            }, 3000)
+            // this.spark = new Spark(this.posX, this.posY);
+
+        }
     }
     
         public setLocation(x:number, y:number) {
@@ -35,7 +52,7 @@ class Fire {
     }
         public deleteFire(){
         
-        // document.body.removeChild(this.div);
+        document.body.removeChild(this.div);
         
     }
             public checkFireCollision(pad: Bullet): boolean {
@@ -46,7 +63,8 @@ class Fire {
                 this.hitPoints -= 10;
                 // pad.deleteBullet();
                 if(this.hitPoints == 0){
-                this.div.remove();
+                this.div.classList.add("fireDead");
+                // this.div.remove();
                 delete this;
 
                 this.enemyDown = true;
@@ -67,11 +85,22 @@ class Fire {
     }
     
     //check character when fire is hitted
-    public checkCharacterCollision (pad: Character, player: Player) {
+    public checkCharacterCollision (pad: Character, player: Player, level: Level) {
         if (this.posX <= pad.getX() + 80 && this.posX >= pad.getX() - 80 && this.posY <= pad.getY() + 150 && this.posY >= pad.getY() - 10) {
-            console.log("character hitted by fire!!!!");
-            player.characterHitted();
+            if(player.hitpoints > 0){
+                player.characterHitted(10);
+            }
+            else {
+                level.deleteAll();
+                player.showGameOverScreen();
+            }
         }   
+    }
+
+    public moveSpark(character: Character, player: Player) {
+        for (var key of this.sparkArray) {
+                key.move(character, player);
+        }
     }
 
 }

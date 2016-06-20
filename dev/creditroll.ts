@@ -17,7 +17,6 @@ class CreditRoll {
     constructor(time: number, name: string) {
         this.playerName = name;
         this.time = time;
-        console.log("finalscreen");
         this.credit = document.createElement("creditscreen");
         this.credit.setAttribute("id", "credits");
         document.body.appendChild(this.credit);
@@ -35,7 +34,6 @@ class CreditRoll {
     
     private counter() { 
             this.count++;
-            console.log(this.count);
             
             if (this.count == 5){
                 clearInterval(this.timer);

@@ -12,7 +12,7 @@
 //Connect database
 require_once("db_connect.php");
   
-$queryAll = "SELECT * FROM NaamEnScore ";
+$queryAll = "SELECT * FROM NaamEnScore ORDER BY score ASC";
 $resultTwo = mysqli_query($conn, $queryAll);
 
 $name = array();
@@ -26,8 +26,10 @@ while ($row = mysqli_fetch_assoc($resultTwo)) {
 <th colspan="2">Highscore</th>
 <tr>
   <td>Name</td>
-  <td>Score</td>
+  <td>Tijd</td>
 </tr>
+
+
 <?php
 foreach($name as $names) {
 
@@ -44,18 +46,13 @@ foreach($name as $names) {
     echo '</td>';
 
     echo '</tr>';
-
-    
-
-
-
     
 }
 echo '</table>';
 
 ?>
 
-<input type="button" value="terug" class="button-back">
+<input type="button" id="indexphp" name="sendBack" value="Beginscherm" class="button-back" onClick="location.href='../index.php';">
 
 
 

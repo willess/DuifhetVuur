@@ -1,6 +1,6 @@
 /// <reference path="player.ts"/>
 /// <reference path="howler.d.ts"/>
-/// <reference path="definitions/jquery.d.ts" />
+/// <reference path="defenitions/jquery.d.ts" />
 
 /**
  * Startgame
@@ -34,10 +34,15 @@ class Startgame {
     private timeCounter: number;
     private time: number = 0;
     private player1: Player;
+    private reload: boolean;
     // public xhttp: XMLHttpRequest;
 
     
-constructor(soundTrue: boolean) {
+constructor(soundTrue: boolean, reload: boolean) {
+    this.reload = reload;
+    if(this.reload) {
+        location.reload();
+    }
 
     this.testjQuery();
     
@@ -47,7 +52,7 @@ constructor(soundTrue: boolean) {
     
     if(this.soundTrue){
             var sound = new Howl({
-                // urls: ["sound/intro/gameMusic1.mp3"],
+                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -105,26 +110,17 @@ constructor(soundTrue: boolean) {
         this.startCredits.addEventListener("click", this.creditScreen.bind(this));
 
         this.startButton.addEventListener("click", this.createWorld.bind(this));
+
+        // location.reload();
         
     }
 
     private createWorld() {
         this.playerValue = this.nameTextField.value;       
-        console.log(this.playerValue);
-
-        // this.playerValue = this.nameTextField;
-        //console.log(this.playerValue);
-        // $.post("include/names.php", { name: this.playerValue});
-
-        // this.xhttp.open("GET", "names.php", true);
-        // this.xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        // this.xhttp.send('?name='+this.playerValue);
 
         this.startScreen.remove();
         this.startWrapper.remove();
-        this.player = new Player(this.playerValue);
-        // this.player1 = new Player();
-        // this.time = setInterval(this.timer.bind(this), 1000);   
+        this.player = new Player(this.playerValue); 
         new Level(5, "level1", 0, this.player);
     }
 
@@ -132,7 +128,7 @@ constructor(soundTrue: boolean) {
         this.startLogo.remove();
         this.startScreen.remove();
         this.startWrapper.remove();
-        this.highscoreView = new highscore();
+        this.highscoreView = new highscore(this.reload);
     }
 
     private HowToPlayScreen() {
@@ -143,17 +139,14 @@ constructor(soundTrue: boolean) {
     private creditScreen() {
         this.startLogo.remove();
         this.startWrapper.remove();
-        // new CreditRoll();
     }
 
-    private testjQuery(){
-        console.log("start jquery testje");
-        
+    private testjQuery(){        
         $.getJSON("js/test.json", (data) => this.finishedLoading(data));
     }
 
     private finishedLoading(data:any): void {
-        console.log("json has loaded with jquery hooray");
-        console.dir(data);
+        // console.log("json has loaded with jquery hooray");
+        // console.dir(data);
     }
 }
