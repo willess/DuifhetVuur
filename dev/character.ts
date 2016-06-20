@@ -178,4 +178,8 @@ class Character {
         this.character = null;
     }
 
+    public gameOver(): void {
+        new gameOver();
+    }
+
 }

@@ -52,7 +52,7 @@ constructor(soundTrue: boolean, reload: boolean) {
     
     if(this.soundTrue){
             var sound = new Howl({
-                urls: ["sound/intro/gameMusic1.mp3"],
+                //urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
