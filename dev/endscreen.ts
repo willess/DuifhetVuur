@@ -12,13 +12,19 @@ class EndScreen {
     private endGame:HTMLElement;
     private highScore:HTMLElement;
     private time: number;
+    private playerName:string;
     
-    constructor(time: number) {   
-        this.time = time;     
+    constructor(time: number, name: string) {   
+        this.time = time;
+        this.playerName = name;
+        console.log(this.time);
+
+        this.addToDB();
+             
         //background
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
-        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je tijd is: " + this.time + " seconden!";
+        this.background.innerHTML = "Bedankt voor het spelen " + this.playerName + "<br />" + "Je tijd is: " + this.time + " seconden!";
         document.body.appendChild(this.background);
         
         //play again button
@@ -63,7 +69,12 @@ class EndScreen {
     
     private score() {
         console.log("score");
-        new highscore();
+        window.open("include/highscore.php", '_parent');
+        //new highscore();
+    }
+
+    private addToDB(){
+        $.post("include/names.php", { score: this.time, name: this.playerName});
     }
     
 }

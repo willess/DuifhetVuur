@@ -404,3 +404,16 @@ score {
     box-shadow: 0 10px 6px -6px #777;
     z-index: 100;
 }
+
+
+
+
+
+.td_high {
+    width: 100px;
+    background-color: red;
+}
+
+table {
+    border: 1px solid black;
+}

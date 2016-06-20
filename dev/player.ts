@@ -14,8 +14,11 @@ class Player {
     public currentHP: number = 2000;
 
     private healthbar: HTMLElement;
+    private playerName: string;
     
     constructor(name: string) {
+
+        this.playerName = name;
 
         this.healthbar = document.createElement("healthbar");
         this.healthbar.innerHTML = "HP: " + this.currentHP + "/" + this.hitpoints;

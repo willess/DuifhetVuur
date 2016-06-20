@@ -35,6 +35,7 @@ class Startgame {
     private time: number = 0;
     private player1: Player;
     // public xhttp: XMLHttpRequest;
+
     
 constructor(soundTrue: boolean) {
 
@@ -113,7 +114,7 @@ constructor(soundTrue: boolean) {
 
         // this.playerValue = this.nameTextField;
         //console.log(this.playerValue);
-        $.post("include/names.php", { name: this.playerValue });
+        // $.post("include/names.php", { name: this.playerValue});
 
         // this.xhttp.open("GET", "names.php", true);
         // this.xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -124,7 +125,7 @@ constructor(soundTrue: boolean) {
         this.player = new Player(this.playerValue);
         // this.player1 = new Player();
         // this.time = setInterval(this.timer.bind(this), 1000);   
-        new Level(2, "level1", 0, this.player);
+        new Level(5, "level1", 0, this.player);
     }
 
     private highscoreScreen(){

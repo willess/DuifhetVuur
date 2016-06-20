@@ -215,8 +215,9 @@ var Character = (function () {
     return Character;
 }());
 var CreditRoll = (function () {
-    function CreditRoll(time) {
+    function CreditRoll(time, name) {
         this.count = 0;
+        this.playerName = name;
         this.time = time;
         console.log("finalscreen");
         this.credit = document.createElement("creditscreen");
@@ -237,7 +238,7 @@ var CreditRoll = (function () {
             clearInterval(this.timer);
             document.body.removeChild(this.credit);
             document.body.removeChild(this.wrapper);
-            new EndScreen(this.time);
+            new EndScreen(this.time, this.playerName);
         }
     };
     return CreditRoll;
@@ -246,6 +247,7 @@ var Level = (function () {
     function Level(levelNumber, toUseBackground, time, player) {
         this.matchArray = [];
         this.fireArray = [];
+        this.playerName = player.name;
         this.player = player;
         this.time = time;
         console.log(this.time);
@@ -277,8 +279,8 @@ var Level = (function () {
                 break;
             case 5:
                 console.log("level 5!");
-                this.matches = 10;
-                this.fires = 12;
+                this.matches = 1;
+                this.fires = 1;
                 this.weapon = true;
                 break;
             default:
@@ -362,7 +364,7 @@ var Level = (function () {
             new middleScreen(this.levelNumber - 1, this.time);
         }
         if (this.levelNumber > 5) {
-            new CreditRoll(this.time);
+            new CreditRoll(this.time, this.playerName);
         }
         else {
             new Level(this.levelNumber, "level1", this.time, this.player);
@@ -374,6 +376,7 @@ var Player = (function () {
     function Player(name) {
         this.hitpoints = 2000;
         this.currentHP = 2000;
+        this.playerName = name;
         this.healthbar = document.createElement("healthbar");
         this.healthbar.innerHTML = "HP: " + this.currentHP + "/" + this.hitpoints;
         document.body.appendChild(this.healthbar);
@@ -451,11 +454,10 @@ var Startgame = (function () {
     Startgame.prototype.createWorld = function () {
         this.playerValue = this.nameTextField.value;
         console.log(this.playerValue);
-        $.post("include/names.php", { name: this.playerValue });
         this.startScreen.remove();
         this.startWrapper.remove();
         this.player = new Player(this.playerValue);
-        new Level(2, "level1", 0, this.player);
+        new Level(5, "level1", 0, this.player);
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
@@ -483,11 +485,14 @@ var Startgame = (function () {
     return Startgame;
 }());
 var EndScreen = (function () {
-    function EndScreen(time) {
+    function EndScreen(time, name) {
         this.time = time;
+        this.playerName = name;
+        console.log(this.time);
+        this.addToDB();
         this.background = document.createElement("back");
         this.background.setAttribute("id", "backend");
-        this.background.innerHTML = "Bedankt voor het spelen naam" + "<br />" + "Je tijd is: " + this.time + " seconden!";
+        this.background.innerHTML = "Bedankt voor het spelen " + this.playerName + "<br />" + "Je tijd is: " + this.time + " seconden!";
         document.body.appendChild(this.background);
         this.playAgain = document.createElement("button");
         this.playAgain.setAttribute("id", "againbutton");
@@ -522,7 +527,10 @@ var EndScreen = (function () {
     };
     EndScreen.prototype.score = function () {
         console.log("score");
-        new highscore();
+        window.open("include/highscore.php", '_parent');
+    };
+    EndScreen.prototype.addToDB = function () {
+        $.post("include/names.php", { score: this.time, name: this.playerName });
     };
     return EndScreen;
 }());

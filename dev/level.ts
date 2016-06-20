@@ -30,9 +30,11 @@ class Level {
     private timeCounter: number;
 
     public player: Player;
+    private playerName: string;
+
 
     constructor(levelNumber: number, toUseBackground: string, time: number, player: Player) {
-
+        this.playerName = player.name;
         this.player = player;
 
         this.time = time;
@@ -69,8 +71,8 @@ class Level {
                 break;
             case 5:
                 console.log("level 5!");
-                this.matches = 10;
-                this.fires = 12;
+                this.matches = 1;
+                this.fires = 1;
                 this.weapon = true;
                 break;
 
@@ -186,7 +188,7 @@ class Level {
         }
 
         if(this.levelNumber > 5) {
-            new CreditRoll(this.time);
+            new CreditRoll(this.time, this.playerName);
         }
         else{
         new Level(this.levelNumber, "level1", this.time, this.player);

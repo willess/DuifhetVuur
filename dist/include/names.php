@@ -2,11 +2,10 @@
 
 //Connect database
 require_once("db_connect.php");
-
-if (isset($_POST['name'])) {
-
-
-  $value = $_POST['name'];
+  
+  $value = $_POST['score'];
+  $value2 = $_POST['name'];
+  // $value = $_POST['score'];
   
   echo "Dit is " + $value;
 
@@ -21,12 +20,12 @@ if (isset($_POST['name'])) {
 
 //   if (empty($errors)) {
     //Insert values from form in database
-    $sql = "INSERT INTO NaamEnScore (naam) VALUES ('$value')";
+    $sql = "INSERT INTO NaamEnScore (score, naam) VALUES ('$value', '$value2' )";
 
     $result = mysqli_query($conn, $sql);
     // header("Location: secure.php");
     // exit;
-  }
+  
 
 
 
