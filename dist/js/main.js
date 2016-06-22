@@ -72,7 +72,7 @@ var Lucifer = (function () {
         this.div.style.transform = "translate(" + x + "px, " + y + "px";
     };
     Lucifer.prototype.checkCollision = function (player) {
-        if (this.posX <= player.getX() + 80 && this.posX >= player.getX() - 80 && this.posY <= player.getY() + 150 && this.posY >= player.getY() - 10) {
+        if (this.posX <= player.getX() + 100 && this.posX >= player.getX() + 50 && this.posY <= player.getY() + 150 && this.posY >= player.getY() + 50) {
             if (this.enemyDown == false) {
                 this.div.classList.add("enemyDead");
                 this.enemyDown = true;
@@ -124,23 +124,23 @@ var Character = (function () {
         switch (event.keyCode) {
             case this.upkey:
                 if (this.posY > 0) {
-                    this.upSpeed = 5;
+                    this.upSpeed = 8;
                 }
                 break;
             case this.downkey:
                 if (this.posY < window.innerHeight - 138) {
-                    this.downSpeed = 5;
+                    this.downSpeed = 8;
                 }
                 break;
             case this.leftkey:
                 if (this.posX > 0) {
-                    this.leftSpeed = 5;
+                    this.leftSpeed = 8;
                 }
                 this.lastKey = 1;
                 break;
             case this.rightkey:
                 if (this.posX < window.innerWidth - 141) {
-                    this.rightSpeed = 5;
+                    this.rightSpeed = 8;
                 }
                 this.lastKey = 0;
                 break;
@@ -265,21 +265,38 @@ var Level = (function () {
                 break;
             case 3:
                 this.matches = 10;
-                this.fires = 8;
+                this.fires = 6;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 1;
                 break;
             case 4:
                 this.matches = 10;
+                this.fires = 8;
+                this.weapon = true;
+                this.spark = true;
+                this.sparkTimer = 2;
+                break;
+            case 5:
+                this.matches = 10;
+                this.fires = 12;
+                this.weapon = true;
+                this.spark = true;
+                this.sparkTimer = 3;
+                break;
+            case 6:
+                this.matches = 8;
                 this.fires = 10;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 4;
                 break;
-            case 5:
-                this.matches = 1;
-                this.fires = 1;
+            case 7:
+                this.matches = 5;
+                this.fires = 15;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 5;
                 break;
             default:
                 break;
@@ -300,7 +317,7 @@ var Level = (function () {
             this.matchArray.push(this.match);
         }
         for (var i = 0; i < this.fires; i++) {
-            this.fire = new Fire(this.spark);
+            this.fire = new Fire(this.spark, this.sparkTimer);
             this.fireArray.push(this.fire);
         }
         requestAnimationFrame(this.gameLoop.bind(this));
@@ -364,7 +381,13 @@ var Level = (function () {
         if (this.levelNumber == 5) {
             new middleScreen(this.levelNumber - 1, this.time);
         }
-        if (this.levelNumber > 5) {
+        if (this.levelNumber == 6) {
+            new middleScreen(this.levelNumber - 1, this.time);
+        }
+        if (this.levelNumber == 7) {
+            new middleScreen(this.levelNumber - 1, this.time);
+        }
+        if (this.levelNumber > 7) {
             Level.killCounter.div.remove();
             new CreditRoll(this.time, this.playerName);
         }
@@ -393,8 +416,8 @@ var Level = (function () {
 }());
 var Player = (function () {
     function Player(name) {
-        this.hitpoints = 10;
-        this.startHp = 2000;
+        this.hitpoints = 1000;
+        this.startHp = 1000;
         this.playerName = name;
         this.healthbar = document.createElement("healthbar");
         this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
@@ -409,7 +432,7 @@ var Player = (function () {
     Player.prototype.characterHitted = function (hp) {
         this.hitpoints = this.hitpoints - hp;
         this.showHP(this.hitpoints);
-        if (this.hitpoints == 0) {
+        if (this.hitpoints <= 0) {
             console.log("Game Over!");
             new gameOver();
         }
@@ -434,6 +457,7 @@ var Startgame = (function () {
         }
         if (this.soundTrue) {
             var sound = new Howl({
+                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -480,7 +504,7 @@ var Startgame = (function () {
         this.startScreen.remove();
         this.startWrapper.remove();
         this.player = new Player(this.playerValue);
-        new Level(5, "level1", 0, this.player);
+        new Level(1, "level1", 0, this.player);
     };
     Startgame.prototype.highscoreScreen = function () {
         this.startLogo.remove();
@@ -551,11 +575,13 @@ var EndScreen = (function () {
     return EndScreen;
 }());
 var Fire = (function () {
-    function Fire(spark) {
+    function Fire(spark, sparkTimer) {
         var _this = this;
         this.enemyDown = false;
         this.hitPoints = 1000;
         this.sparkArray = [];
+        this.randomSpeed = [1000, 1300, 2000, 4000, 800, 1700, 2800, 3100];
+        this.sparkTimer = sparkTimer;
         this.div = document.createElement("fire");
         document.body.appendChild(this.div);
         function randomX(min, max) {
@@ -568,15 +594,16 @@ var Fire = (function () {
         this.posY = randomY(50, window.innerHeight - 150);
         this.setLocation(this.posX, this.posY);
         if (spark) {
+            var rand = this.randomSpeed[Math.floor(Math.random() * this.randomSpeed.length)];
             var a = setInterval(function () {
                 if (_this.enemyDown == false) {
-                    _this.spark = new Spark(_this.posX, _this.posY);
+                    _this.spark = new Spark(_this.posX, _this.posY, _this, _this.sparkTimer);
                     _this.sparkArray.push(_this.spark);
                 }
                 else {
                     clearInterval(a);
                 }
-            }, 3000);
+            }, rand);
         }
     }
     Fire.prototype.setLocation = function (x, y) {
@@ -591,7 +618,6 @@ var Fire = (function () {
                 this.hitPoints -= 10;
                 if (this.hitPoints == 0) {
                     this.div.classList.add("fireDead");
-                    delete this;
                     this.enemyDown = true;
                     var sound = new Howl({
                         urls: ["sound/step.wav"],
@@ -613,7 +639,6 @@ var Fire = (function () {
             }
             else {
                 level.deleteAll();
-                player.showGameOverScreen();
             }
         }
     };
@@ -621,6 +646,13 @@ var Fire = (function () {
         for (var _i = 0, _a = this.sparkArray; _i < _a.length; _i++) {
             var key = _a[_i];
             key.move(character, player);
+        }
+    };
+    Fire.prototype.deleteSpark = function (spark) {
+        for (var i = 0; i < this.sparkArray.length; i++) {
+            if (this.sparkArray[i] == spark) {
+                this.sparkArray.splice(i, 1);
+            }
         }
     };
     return Fire;
@@ -771,29 +803,42 @@ var EnemiesKilled = (function () {
     return EnemiesKilled;
 }());
 var Spark = (function () {
-    function Spark(posX, posY) {
+    function Spark(posX, posY, fire, sparkTimer) {
+        this.directionArray = [-1, -2, -3, -4, -5, -6, -7, -8, 1, 2, 3, 4, 5, 6, 7];
+        this.sparkTimer = sparkTimer;
+        this.fire = fire;
         this.posX = posX;
         this.posY = posY;
         this.div = document.createElement("spark");
         document.body.appendChild(this.div);
-        this.speedX = Math.ceil(Math.random() * 5);
-        this.speedY = Math.ceil(Math.random() * 5);
+        var X = this.directionArray[Math.floor(Math.random() * this.directionArray.length)];
+        var Y = this.directionArray[Math.floor(Math.random() * this.directionArray.length)];
+        this.speedX = Math.ceil(Math.random() * X);
+        this.speedY = Math.ceil(Math.random() * Y);
+        this.timer();
     }
     Spark.prototype.move = function (character, player) {
         this.posX += this.speedX;
         this.posY += this.speedY;
-        if (this.posX > window.innerWidth || this.posX < 0) {
-            this.div.remove();
-        }
-        if (this.posY > window.innerHeight || this.posY < 0) {
-            this.div.remove();
-        }
         this.div.style.transform = "translate(" + this.posX + "px, " + this.posY + "px)";
         if (this.posX <= character.getX() + 80 && this.posX >= character.getX() - 80 && this.posY <= character.getY() + 150 && this.posY >= character.getY() - 10) {
             this.div.remove();
-            player.characterHitted(1);
+            this.fire.deleteSpark(this);
+            player.characterHitted(20);
             console.log("spark hit character!!");
         }
+    };
+    Spark.prototype.timer = function () {
+        var _this = this;
+        var t = 0;
+        var a = setInterval(function () {
+            t++;
+            if (t == _this.sparkTimer) {
+                console.log("deleted");
+                _this.div.remove();
+                _this.fire.deleteSpark(_this);
+            }
+        }, 1000);
     };
     return Spark;
 }());

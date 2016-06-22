@@ -6,7 +6,7 @@
 
 
 * {
-    font-family: 'Press Start 2P', cursive;
+    font-family: game-font;
     margin:0px; padding:0px;
     overflow:hidden;
 }
@@ -240,8 +240,8 @@ character {
     background-image: url(../images/character/Pidgeon_right.png);
     background-repeat: no-repeat;
     background-color: none;
-    width: 178px;
-    height: 181px;
+    width: 155px;
+    height: 155px;
     z-index: 5;
     /*border: solid 1px black;*/
 }
@@ -262,7 +262,7 @@ score{
     color: white;
     z-index: 10;
     right: 45%;
-    width: 250px;
+    width: 300px;
     height: 150px;
 }
 
@@ -274,7 +274,8 @@ fire {
 
 .fireDead {
     background-image: url(../images/enemies/fireDown.png);
-    top: 50px;
+    top: 70px;
+    left: 20px;
 }
 
 waterGun {
@@ -420,7 +421,7 @@ table {
 healthbar {
     font-family: game-font;
     font-size: 24px;
-    color: red;
+    color: white;
     left: 5px;
     top: 5px;
 }
@@ -429,6 +430,7 @@ spark {
     background-image: url(../images/enemies/spark.png);
     width: 30px;
     height: 30px;
+<<<<<<< Updated upstream
 }
 
 #gameover-bg {
@@ -460,4 +462,8 @@ spark {
         -ms-animation: fadein 5s; /* Internet Explorer */
          -o-animation: fadein 5s; /* Opera < 12.1 */
             animation: fadein 5s;
+=======
+    top: 75px;
+    left: 75px;
+>>>>>>> Stashed changes
 }

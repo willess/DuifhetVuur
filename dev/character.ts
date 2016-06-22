@@ -73,23 +73,23 @@ class Character {
         switch (event.keyCode) {
             case this.upkey:
                 if(this.posY > 0){
-                    this.upSpeed = 5;
+                    this.upSpeed = 8;
                 }
                 break;
             case this.downkey:
                 if(this.posY < window.innerHeight - 138){
-                    this.downSpeed = 5;
+                    this.downSpeed = 8;
                 }
                 break;
             case this.leftkey:
                 if (this.posX > 0){
-                    this.leftSpeed = 5;
+                    this.leftSpeed = 8;
                 }
                 this.lastKey = 1;
                 break;
             case this.rightkey:
                 if (this.posX < window.innerWidth - 141){
-                    this.rightSpeed = 5;
+                    this.rightSpeed = 8;
                 }
                 this.lastKey = 0;
                 break;

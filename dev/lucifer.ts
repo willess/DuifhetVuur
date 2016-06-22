@@ -48,7 +48,7 @@ class Lucifer {
     }
 
     public checkCollision(player: Character): boolean {
-        if (this.posX <= player.getX() + 80 && this.posX >= player.getX() - 80 && this.posY <= player.getY() + 150 && this.posY >= player.getY() - 10) {
+        if (this.posX <= player.getX() + 100 && this.posX >= player.getX() + 50 && this.posY <= player.getY() + 150 && this.posY >= player.getY() + 50) {
             //Als character raakt lucifer dan ...
             if (this.enemyDown == false) {
                 //this.div.setAttribute("id", "enemyDead");

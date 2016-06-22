@@ -52,7 +52,7 @@ constructor(soundTrue: boolean, reload: boolean) {
     
     if(this.soundTrue){
             var sound = new Howl({
-                //urls: ["sound/intro/gameMusic1.mp3"],
+                urls: ["sound/intro/gameMusic1.mp3"],
                 loop: true,
                 sprite: {
                     intro: [0, 150000],
@@ -121,7 +121,7 @@ constructor(soundTrue: boolean, reload: boolean) {
         this.startScreen.remove();
         this.startWrapper.remove();
         this.player = new Player(this.playerValue); 
-        new Level(5, "level1", 0, this.player);
+        new Level(1, "level1", 0, this.player);
     }
 
     private highscoreScreen(){

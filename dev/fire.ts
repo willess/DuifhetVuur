@@ -15,9 +15,14 @@ class Fire {
     private spark: Spark;
     public sparkArray = [];
 
-    constructor(spark: boolean) {
-       this.div = document.createElement("fire");
-       document.body.appendChild(this.div);
+    private randomSpeed = [1000, 1300, 2000, 4000, 800, 1700, 2800, 3100];
+
+    private sparkTimer: number;
+
+    constructor(spark: boolean, sparkTimer: number) {
+        this.sparkTimer = sparkTimer;
+        this.div = document.createElement("fire");
+        document.body.appendChild(this.div);
                
         function randomX(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
@@ -32,18 +37,20 @@ class Fire {
         
         this.setLocation(this.posX, this.posY);
 
+
+
         if(spark) {
+            var rand = this.randomSpeed[Math.floor(Math.random() * this.randomSpeed.length)];
+
             var a = setInterval(() => {
                 if(this.enemyDown == false){
-                    this.spark = new Spark(this.posX, this.posY);
+                    this.spark = new Spark(this.posX, this.posY, this, this.sparkTimer);
                     this.sparkArray.push(this.spark);
                 }
                 else {
                     clearInterval(a);
                 }
-            }, 3000)
-            // this.spark = new Spark(this.posX, this.posY);
-
+            }, rand)
         }
     }
     
@@ -65,7 +72,6 @@ class Fire {
                 if(this.hitPoints == 0){
                 this.div.classList.add("fireDead");
                 // this.div.remove();
-                delete this;
 
                 this.enemyDown = true;
                 var sound = new Howl({
@@ -92,7 +98,6 @@ class Fire {
             }
             else {
                 level.deleteAll();
-                player.showGameOverScreen();
             }
         }   
     }
@@ -100,6 +105,14 @@ class Fire {
     public moveSpark(character: Character, player: Player) {
         for (var key of this.sparkArray) {
                 key.move(character, player);
+        }
+    }
+
+    public deleteSpark(spark: Spark) {
+        for (var i = 0; i < this.sparkArray.length; i++) {
+            if(this.sparkArray[i] == spark) {
+                this.sparkArray.splice(i, 1);
+            }            
         }
     }
 

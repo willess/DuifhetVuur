@@ -10,8 +10,8 @@ class Player {
     public score : number;
 
     public time: number;
-    public hitpoints: number = 10;
-    public startHp: number = 2000;
+    public hitpoints: number = 1000;
+    public startHp: number = 1000;
 
     private healthbar: HTMLElement;
     private playerName: string;
@@ -40,7 +40,7 @@ class Player {
         this.hitpoints = this.hitpoints - hp;
         this.showHP(this.hitpoints);
 
-        if (this.hitpoints == 0){
+        if (this.hitpoints <= 0){
             console.log("Game Over!");
             new gameOver();
         }
@@ -51,7 +51,5 @@ class Player {
         this.healthbar.innerHTML = "HP: " + this.hitpoints + "/" + this.startHp;
 
     }
-
- 
 
 }

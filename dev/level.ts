@@ -34,6 +34,8 @@ class Level {
 
     private spark: boolean;
 
+    private sparkTimer: number;
+
     constructor(levelNumber: number, toUseBackground: string, time: number, player: Player) {
 
         this.playerName = player.name;
@@ -60,23 +62,42 @@ class Level {
             case 3:
                 //level 3
                 this.matches = 10;
-                this.fires = 8;
+                this.fires = 6;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 1;
                 break;
             case 4:
                 //level 4
                 this.matches = 10;
-                this.fires = 10;
+                this.fires = 8;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 2;
                 break;
             case 5:
                 //level 5
-                this.matches = 1;
-                this.fires = 1;
+                this.matches = 10;
+                this.fires = 12;
                 this.weapon = true;
                 this.spark = true;
+                this.sparkTimer = 3;
+                break;
+            case 6:
+                //level 6
+                this.matches = 8;
+                this.fires = 10;
+                this.weapon = true;
+                this.spark = true;
+                this.sparkTimer = 4;
+                break;
+            case 7:
+                //level 7
+                this.matches = 5;
+                this.fires = 15;
+                this.weapon = true;
+                this.spark = true;
+                this.sparkTimer = 5;
                 break;
 
             default:
@@ -104,7 +125,7 @@ class Level {
         }
 
         for (var i = 0; i < this.fires; i++) {
-            this.fire = new Fire(this.spark);
+            this.fire = new Fire(this.spark, this.sparkTimer);
             this.fireArray.push(this.fire);
         }
 
@@ -130,7 +151,7 @@ class Level {
                         Level.killCounter.updateScores();
                     }
                 }
-            }
+        }
         
         // this.playerTwo.move();
         this.playerOne.move();
@@ -190,15 +211,20 @@ class Level {
         if(this.levelNumber == 5){
             new middleScreen(this.levelNumber -1, this.time);
         }
+        if(this.levelNumber == 6){
+            new middleScreen(this.levelNumber -1, this.time);
+        }
+        if(this.levelNumber == 7){
+            new middleScreen(this.levelNumber -1, this.time);
+        }
 
-        if(this.levelNumber > 5) {
+        if(this.levelNumber > 7) {
             Level.killCounter.div.remove();
             new CreditRoll(this.time, this.playerName);
         }
         else{
             new Level(this.levelNumber, "level1", this.time, this.player);
         }
-
     }
 
     public deleteAll() {
@@ -219,5 +245,4 @@ class Level {
         this.levelNumber++;
         clearInterval(this.timeCounter);
     }
-
 }

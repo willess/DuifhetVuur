@@ -53,7 +53,6 @@ class EndScreen {
             console.log("exit");
             window.close();
         }
-        
     }
     
     private again(){
