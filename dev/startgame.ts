@@ -128,7 +128,8 @@ constructor(soundTrue: boolean, reload: boolean) {
         this.startLogo.remove();
         this.startScreen.remove();
         this.startWrapper.remove();
-        this.highscoreView = new highscore(this.reload);
+        window.open("include/highscore.php", '_parent');
+        // this.highscoreView = new highscore(this.reload);
     }
 
     private HowToPlayScreen() {

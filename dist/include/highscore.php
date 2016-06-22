@@ -52,7 +52,7 @@ echo '</table>';
 
 ?>
 
-<input type="button" id="indexphp" name="sendBack" value="Opniew Spelen" class="button-back" onClick="location.href='../index.php';">
+<input type="button" id="indexphp" name="sendBack" value="Home" class="button-back" onClick="location.href='../index.php';">
 
 
 

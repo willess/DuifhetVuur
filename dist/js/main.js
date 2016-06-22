@@ -510,7 +510,7 @@ var Startgame = (function () {
         this.startLogo.remove();
         this.startScreen.remove();
         this.startWrapper.remove();
-        this.highscoreView = new highscore(this.reload);
+        window.open("include/highscore.php", '_parent');
     };
     Startgame.prototype.HowToPlayScreen = function () {
         this.startLogo.remove();
